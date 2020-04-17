@@ -4,7 +4,7 @@ import pulseio
 from adafruit_motor import servo
 from functools import reduce
 
-pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=20)
+pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=50)
 my_servo = servo.Servo(pwm)
 
 DEFAULT = 0
