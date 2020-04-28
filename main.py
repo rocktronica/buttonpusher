@@ -169,7 +169,7 @@ print()
 setAngle(DEFAULT)
 time.sleep(1)
 
-run(REDEEM_NOOK_MILES_SEQUENCE, 1)
+run(CRAFT_SEQUENCE, 10)
 
 setAngle(DEFAULT)
 time.sleep(.1)
