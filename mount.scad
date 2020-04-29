@@ -1,12 +1,18 @@
 MOUNT_LENGTH = 100.9;
 MOUNT_HEIGHT = 14;
 
-module mount(width) {
+MIN_WALL = .6;
+
+module mount(
+    width,
+    fdm = false,
+    tolerance = 0
+) {
     MOUNT_WALL = 2.1;
-    MOUNT_DEPTH = 3;
-    MOUNT_LIP_DEPTH = 1;
-    MOUNT_LIP_BEYOND_WALL = 3.4 - MOUNT_WALL;
-    MOUNT_STOP = 14.5;
+    MOUNT_DEPTH = 3 + tolerance;
+    MOUNT_LIP_DEPTH = 1 - tolerance;
+    MOUNT_LIP_BEYOND_WALL = 3.4 - MOUNT_WALL - tolerance;
+    MOUNT_STOP = 14.5 - tolerance;
 
     e = .005678;
 
@@ -46,7 +52,20 @@ module mount(width) {
                 MOUNT_STOP,
                 z
             ]) {
-                # lip();
+                lip();
+            }
+        }
+    }
+
+    module lips_support(count = 4, length = MIN_WALL) {
+        start = MOUNT_STOP - length;
+        end = MOUNT_LENGTH - length;
+        plot = (end - start) / (count);
+
+        // Intentionally 0 indexed to skip overlap w/ MOUNT_STOP
+        for (i = [1 : count]) {
+            translate([width - MOUNT_LIP_DEPTH, start + i * plot, 0]) {
+                cube([MOUNT_LIP_DEPTH, length, MOUNT_HEIGHT]);
             }
         }
     }
@@ -57,6 +76,11 @@ module mount(width) {
     }
 
     lips();
+    # if (fdm) lips_support();
 }
 
-mount(5);
+tolerances = [0, .1, .2];
+
+for (i = [0 : len(tolerances) - 1]) {
+    translate([i * 10, 0, 0]) mount(5, fdm = true, tolerance = tolerances[i]);
+}
