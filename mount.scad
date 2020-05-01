@@ -2,13 +2,12 @@ MOUNT_LENGTH = 100.9;
 MOUNT_HEIGHT = 14;
 
 MIN_WALL = .6;
+MAX_BRIDGE = 10;
 
 module mount(
     width,
     fdm = false,
-
-    supports_count = 4,
-
+    supports_count = undef,
     tolerance = 0
 ) {
     MOUNT_WALL = 2.1;
@@ -16,6 +15,10 @@ module mount(
     MOUNT_LIP_DEPTH = 1 - tolerance;
     MOUNT_LIP_BEYOND_WALL = 3 - MOUNT_WALL - tolerance;
     MOUNT_STOP = 10 - tolerance;
+
+    supports_count = supports_count != undef
+        ? supports_count
+        : ceil((MOUNT_LENGTH - MOUNT_STOP) / MAX_BRIDGE);
 
     e = .005678;
 
