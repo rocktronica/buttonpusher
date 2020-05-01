@@ -9,22 +9,18 @@ module mount(
 
     supports_count = 4,
 
-    cavity_height_tolerance = 0,
-    mount_depth_tolerance = 0,
-    mount_lip_depth_tolerance = 0,
-    mount_lip_beyond_wall_tolerance = 0,
-    mount_stop_tolerance = 0
+    tolerance = 0
 ) {
     MOUNT_WALL = 2.1;
-    MOUNT_DEPTH = 3 + mount_depth_tolerance;
-    MOUNT_LIP_DEPTH = 1 - mount_lip_depth_tolerance;
-    MOUNT_LIP_BEYOND_WALL = 3 - MOUNT_WALL - mount_lip_beyond_wall_tolerance;
-    MOUNT_STOP = 10 - mount_stop_tolerance;
+    MOUNT_DEPTH = 3 + tolerance;
+    MOUNT_LIP_DEPTH = 1 - tolerance;
+    MOUNT_LIP_BEYOND_WALL = 3 - MOUNT_WALL - tolerance;
+    MOUNT_STOP = 10 - tolerance;
 
     e = .005678;
 
     cavity_length = MOUNT_LENGTH - MOUNT_STOP;
-    cavity_height = MOUNT_HEIGHT - MOUNT_WALL * 2 + cavity_height_tolerance * 2;
+    cavity_height = MOUNT_HEIGHT - MOUNT_WALL * 2 + tolerance * 2;
     cavity_z = (cavity_height - MOUNT_HEIGHT) / -2;
 
     module cavity(overage = e) {
@@ -93,10 +89,6 @@ for (i = [0 : len(tolerances) - 1]) {
         width = 4,
         fdm = true,
         supports_count = 2,
-        cavity_height_tolerance = .2,
-        mount_depth_tolerance = .2,
-        mount_lip_depth_tolerance = .2,
-        mount_lip_beyond_wall_tolerance = tolerances[i],
-        mount_stop_tolerance = .2
+        tolerance = .2
     );
 }
