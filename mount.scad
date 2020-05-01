@@ -7,6 +7,8 @@ module mount(
     width,
     fdm = false,
 
+    supports_count = 4,
+
     cavity_height_tolerance = 0,
     mount_depth_tolerance = 0,
     mount_lip_depth_tolerance = 0,
@@ -62,7 +64,7 @@ module mount(
         }
     }
 
-    module lips_support(count = 4, length = MIN_WALL) {
+    module lips_support(count = supports_count, length = MIN_WALL) {
         start = MOUNT_STOP - length;
         end = MOUNT_LENGTH - length;
         plot = (end - start) / (count);
