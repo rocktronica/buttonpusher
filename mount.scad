@@ -12,7 +12,7 @@ module mount(
     MOUNT_DEPTH = 3 + tolerance;
     MOUNT_LIP_DEPTH = 1 - tolerance;
     MOUNT_LIP_BEYOND_WALL = 3.4 - MOUNT_WALL - tolerance;
-    MOUNT_STOP = 14.5 - tolerance;
+    MOUNT_STOP = 10 - tolerance;
 
     e = .005678;
 
