@@ -86,16 +86,17 @@ module mount(
     # if (fdm) lips_support();
 }
 
-tolerances = [0, .1, .2];
+tolerances = [.2, .5, .8];
 
 for (i = [0 : len(tolerances) - 1]) {
     translate([i * 10, 0, 0]) mount(
-        5,
+        width = 4,
         fdm = true,
-        cavity_height_tolerance = tolerances[i],
-        mount_depth_tolerance = tolerances[i],
-        mount_lip_depth_tolerance = tolerances[i],
+        supports_count = 2,
+        cavity_height_tolerance = .2,
+        mount_depth_tolerance = .2,
+        mount_lip_depth_tolerance = .2,
         mount_lip_beyond_wall_tolerance = tolerances[i],
-        mount_stop_tolerance = tolerances[i]
+        mount_stop_tolerance = .2
     );
 }
