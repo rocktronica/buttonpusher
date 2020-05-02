@@ -1,17 +1,18 @@
 MOUNT_LENGTH = 100.9;
 MOUNT_HEIGHT = 14;
+MOUNT_DEPTH = 3;
 
 MIN_WALL = .6;
 MAX_BRIDGE = 10;
 
 module mount(
-    width,
+    width = MOUNT_DEPTH,
     fdm = false,
     supports_count = undef,
     tolerance = 0
 ) {
     MOUNT_WALL = 2.1;
-    MOUNT_DEPTH = 3 + tolerance;
+    MOUNT_DEPTH = MOUNT_DEPTH + tolerance;
     MOUNT_LIP_DEPTH = 1 - tolerance;
     MOUNT_LIP_BEYOND_WALL = 3 - MOUNT_WALL - tolerance;
     MOUNT_STOP = 10 - tolerance;
@@ -28,7 +29,7 @@ module mount(
 
     module cavity(overage = e) {
         translate([
-            width - MOUNT_DEPTH,
+            width - MOUNT_DEPTH + e,
             MOUNT_STOP,
             cavity_z
         ]) {
@@ -83,15 +84,4 @@ module mount(
 
     lips();
     # if (fdm) lips_support();
-}
-
-tolerances = [.2, .5, .8];
-
-for (i = [0 : len(tolerances) - 1]) {
-    translate([i * 10, 0, 0]) mount(
-        width = 4,
-        fdm = true,
-        supports_count = 2,
-        tolerance = .2
-    );
 }

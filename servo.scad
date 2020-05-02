@@ -54,5 +54,3 @@ module servo(bleed = 0) {
         cube([width, length, height]);
     }
 }
-
-servo();
