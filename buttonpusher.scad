@@ -6,7 +6,9 @@ module buttonpusher(
 
     arm_length = 5,
     arm_diameter = 8,
-    arm_clearance = 1
+    arm_clearance = 1,
+
+    tolerance = .2
 ) {
     BUTTON_Y = 75;
 
@@ -21,7 +23,6 @@ module buttonpusher(
 
     servo_cavity_z = MOUNT_HEIGHT + arm_clearance
         + arm_diameter / 2;
-    tolerance = .2;
 
     module _servo(bleed = 0) {
         translate([
@@ -64,7 +65,7 @@ module buttonpusher(
         servo_cavity();
     }
 
-    translate([width, 0, 0]) mount(3, fdm = true);
+    translate([width, 0, 0]) mount(3, fdm = true, tolerance = tolerance);
 }
 
 buttonpusher();
