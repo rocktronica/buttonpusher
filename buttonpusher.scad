@@ -60,35 +60,6 @@ module buttonpusher(
         button_diameter = 8,
         $fn = 18
     ) {
-        module cavity(
-            diameter,
-            shim_count = 0,
-            shim_width = 1,
-            shim_length = .5,
-            height = horn_length + e * 2
-        ) {
-            difference() {
-                cylinder(
-                    h = height,
-                    d = diameter
-                );
-
-                if (shim_count > 0) {
-                    for (i = [0 : shim_count - 1]) {
-                        rotate([0, 0, i * 360 / shim_count]) {
-                            translate([
-                                shim_width / -2,
-                                diameter / 2 - shim_length,
-                                -e
-                            ]) {
-                                cube([shim_width, shim_length, height + e * 2]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         module armpit(height = 3) {
             x = horn_height;
 
