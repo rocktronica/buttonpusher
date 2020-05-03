@@ -60,6 +60,33 @@ module buttonpusher(
         button_diameter = 8,
         $fn = 18
     ) {
+        module cavity(
+            diameter = SERVO_SHAFT_DIAMETER + tolerance * 2,
+            shim_count = 3,
+            shim_width = 1,
+            shim_length = .5,
+            height = horn_length + e * 2
+        ) {
+            difference() {
+                cylinder(
+                    h = height,
+                    d = diameter
+                );
+
+                for (i = [0 : shim_count - 1]) {
+                    rotate([0, 0, i * 360 / shim_count]) {
+                        translate([
+                            shim_width / -2,
+                            diameter / 2 - shim_length,
+                            -e
+                        ]) {
+                            cube([shim_width, shim_length, height + e * 2]);
+                        }
+                    }
+                }
+            }
+        }
+
         module armpit(height = 3) {
             x = horn_height;
 
@@ -76,10 +103,11 @@ module buttonpusher(
         _y = y + wall + SERVO_HEIGHT + tolerance;
         _z = MOUNT_HEIGHT + horn_clearance;
 
-        difference() {
-            translate([_x, _y, _z]) cube([horn_width, horn_length, horn_height]);
-            translate([_x, _y, _z]) armpit();
-            servo_cavity(0, tolerance + e);
+        translate([_x, _y, _z]) difference() {
+            cube([horn_width, horn_length, horn_height]);
+            armpit();
+            translate([horn_height / 2, -e, horn_height / 2])
+                rotate([-90, 0, 0]) cavity();
         }
     }
 
@@ -96,69 +124,4 @@ module buttonpusher(
     translate([width, 0, 0]) mount(3, fdm = true, tolerance = tolerance);
 }
 
-module horn_fit_test(
-    horn_length = SHAFT_SERVO_HEIGHT,
-    horn_height = 8, // must be > SERVO_SHAFT_DIAMETER
-    tolerances = [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1],
-    shim_counts = [0, 3, 6],
-    gutter = 1,
-    $fn = 24,
-    e = .005678
-) {
-    plot = horn_height + gutter * 2;
-
-    module cavity(
-        diameter,
-        shim_count = 0,
-        shim_width = 1,
-        shim_length = .5,
-        height = horn_length + e * 2
-    ) {
-        difference() {
-            cylinder(
-                h = height,
-                d = diameter
-            );
-
-            if (shim_count > 0) {
-                for (i = [0 : shim_count - 1]) {
-                    rotate([0, 0, i * 360 / shim_count]) {
-                        translate([
-                            shim_width / -2,
-                            diameter / 2 - shim_length,
-                            -e
-                        ]) {
-                            cube([shim_width, shim_length, height + e * 2]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    difference() {
-        cube([
-            plot * len(tolerances),
-            plot * len(shim_counts),
-            horn_length
-        ]);
-
-        for (i = [0 : len(tolerances) - 1]) {
-            for (ii = [0 : len(shim_counts) - 1]) {
-                translate([
-                    i * plot + plot / 2,
-                    ii * plot + plot / 2,
-                    -e
-                ]) {
-                    cavity(
-                        SERVO_SHAFT_DIAMETER + tolerances[i] * 2,
-                        shim_counts[ii]
-                    );
-                }
-            }
-        }
-    }
-}
-
-horn_fit_test();
-/* buttonpusher(); */
+buttonpusher();
