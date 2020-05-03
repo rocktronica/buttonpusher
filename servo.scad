@@ -19,7 +19,7 @@ SERVO_SHAFT_X = 6;
 SERVO_CABLE_Y = 4.6;
 SERVO_CABLE_HEIGHT = 2;
 
-module servo(bleed = 0) {
+module servo(bleed = 0, shaft_bleed = 0) {
     width = 22.7 + bleed * 2;
     length =12.5 + bleed * 2;
     height = 26.9 + bleed * 2;
@@ -29,7 +29,7 @@ module servo(bleed = 0) {
     fin_z = 15.8 + bleed / 2;
 
     shaft_diameter = 5 + bleed;
-    shaft_height = 3 + bleed;
+    shaft_height = 3 + shaft_bleed;
     shaft_x = 6 + bleed;
 
     module fins() {
