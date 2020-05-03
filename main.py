@@ -165,11 +165,24 @@ def click(pressLength = .2):
     time.sleep(pressLength)
     setAngle(REST)
 
-print()
-setAngle(DEFAULT)
-time.sleep(1)
+def main():
+    print()
+    setAngle(DEFAULT)
+    time.sleep(1)
 
-run(CRAFT_SEQUENCE, 10)
+    run(CRAFT_SEQUENCE, 10)
 
-setAngle(DEFAULT)
-time.sleep(.1)
+    setAngle(PRESSED)
+    time.sleep(.1)
+
+def debug():
+    while True:
+        setAngle(DEFAULT)
+        time.sleep(1)
+        setAngle(REST)
+        time.sleep(1)
+        setAngle(PRESSED)
+        time.sleep(1)
+        setAngle(REST)
+
+debug()
