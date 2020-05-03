@@ -8,8 +8,8 @@ pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=5)
 my_servo = servo.Servo(pwm)
 
 DEFAULT = 0
-REST = 120
-PRESSED = REST + 7
+REST = 96
+PRESSED = REST + 4
 
 REDEEM_NOOK_MILES_SEQUENCE = [
     {
