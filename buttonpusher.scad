@@ -25,6 +25,9 @@ module buttonpusher(
     BUTTON_X = 23;
     BUTTON_Y = 75;
 
+    BASE_PLANK_LENGTH = 9.4;
+    BASE_PLANK_HEIGHT = 6.4;
+
     e = .005678;
 
     wall = 2;
@@ -48,6 +51,25 @@ module buttonpusher(
         }
     }
 
+    module _base_plank(
+        bleed = 0,
+        _width = 100,
+        _y = servo_mount_y + SERVO_HEIGHT / 2 - wall,
+        _z = wall
+    ) {
+        translate([
+            servo_mount_x - e,
+            _y - bleed,
+            _z - bleed
+        ]) {
+            cube([
+                _width,
+                BASE_PLANK_LENGTH + bleed * 2,
+                BASE_PLANK_HEIGHT + bleed * 2
+            ]);
+        }
+    }
+
     module servo_cavity(bleed = tolerance, shaft_bleed = 0) {
         _servo(bleed, shaft_bleed);
     }
@@ -61,6 +83,8 @@ module buttonpusher(
                     ZR_BUTTON_STILT + SERVO_LENGTH
                 ]);
             }
+
+            _base_plank(tolerance);
 
             servo_cavity();
         }
@@ -141,16 +165,24 @@ module buttonpusher(
             }
         }
 
-        fulcrum();
-        cube([width, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
-        translate([width, 0, 0]) {
-            cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
+        difference() {
+            union() {
+                fulcrum();
+                cube([width, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
+                translate([width, 0, 0]) {
+                    cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
+                }
+            }
+
+            _base_plank(tolerance);
         }
     }
 
     # _servo();
     servo_mount();
     beam();
+
+    # _base_plank();
 
     base();
 
