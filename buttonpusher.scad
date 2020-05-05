@@ -10,7 +10,7 @@ module buttonpusher(
     horn_height = 8, // must be > SERVO_SHAFT_DIAMETER
     horn_clearance = 1,
 
-    beam_width = 200,
+    beam_width = 150,
     beam_length = SERVO_SHAFT_HEIGHT,
     beam_height = 2,
     beam_clearance = 3,
@@ -126,7 +126,7 @@ module buttonpusher(
                 _c(_wall);
             }
 
-            _c(0, e);
+            _c(tolerance, e);
         }
     }
 
