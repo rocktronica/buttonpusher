@@ -13,24 +13,24 @@ SERVO_FIN_HEIGHT = 2.4;
 SERVO_FIN_Z = 15.8;
 
 SERVO_SHAFT_DIAMETER = 5;
-SHAFT_SERVO_HEIGHT = 3;
+SERVO_SHAFT_HEIGHT = 3;
 SERVO_SHAFT_X = 6;
 
 SERVO_CABLE_Y = 4.6;
 SERVO_CABLE_HEIGHT = 2;
 
 module servo(bleed = 0, shaft_bleed = 0) {
-    width = 22.7 + bleed * 2;
-    length =12.5 + bleed * 2;
-    height = 26.9 + bleed * 2;
+    width = SERVO_WIDTH + bleed * 2;
+    length = SERVO_LENGTH + bleed * 2;
+    height = SERVO_HEIGHT + bleed * 2;
 
-    fin_width = 4.8 + bleed;
-    fin_height = 2.4 + bleed;
-    fin_z = 15.8 + bleed / 2;
+    fin_width = SERVO_FIN_WIDTH + bleed;
+    fin_height = SERVO_FIN_HEIGHT + bleed;
+    fin_z = SERVO_FIN_Z + bleed / 2;
 
-    shaft_diameter = 5 + bleed;
-    shaft_height = 3 + shaft_bleed;
-    shaft_x = 6 + bleed;
+    shaft_diameter = SERVO_SHAFT_DIAMETER + bleed;
+    shaft_height = SERVO_SHAFT_HEIGHT + shaft_bleed;
+    shaft_x = SERVO_SHAFT_X + bleed;
 
     module fins() {
         translate([-fin_width, 0, fin_z]) {
