@@ -1,6 +1,6 @@
 include <mount.scad>;
 include <servo.scad>;
-include <horn.scad>;
+include <horns.scad>;
 
 module buttonpusher(
     width = 4,
