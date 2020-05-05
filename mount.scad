@@ -71,8 +71,16 @@ module mount(
 
         // Intentionally 0 indexed to skip overlap w/ MOUNT_STOP
         for (i = [1 : count]) {
-            translate([width - MOUNT_LIP_DEPTH, start + i * plot, 0]) {
-                cube([MOUNT_LIP_DEPTH, length, MOUNT_HEIGHT]);
+            translate([
+                width - MOUNT_LIP_DEPTH,
+                start + i * plot,
+                MOUNT_WALL - e
+            ]) {
+                cube([
+                    MOUNT_LIP_DEPTH,
+                    length,
+                    MOUNT_HEIGHT - MOUNT_WALL * 2 + e * 2
+                ]);
             }
         }
     }
@@ -83,5 +91,5 @@ module mount(
     }
 
     lips();
-    # if (fdm) lips_support();
+    if (fdm) lips_support();
 }
