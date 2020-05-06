@@ -7,9 +7,9 @@ from functools import reduce
 pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=5)
 my_servo = servo.Servo(pwm)
 
-DEFAULT = 0
-REST = 96
-PRESSED = REST + 4
+DEFAULT = 30
+REST = 90
+PRESSED = 98
 
 REDEEM_NOOK_MILES_SEQUENCE = [
     {
@@ -184,5 +184,6 @@ def debug():
         setAngle(PRESSED)
         time.sleep(1)
         setAngle(REST)
+        time.sleep(1)
 
 debug()

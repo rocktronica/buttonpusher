@@ -5,14 +5,14 @@ include <horns.scad>;
 module buttonpusher(
     width = 4,
 
-    horn_width = 43, // TODO: derive
+    horn_width = 20,
     horn_length = SERVO_SHAFT_HEIGHT,
-    horn_height = 8, // must be > SERVO_SHAFT_DIAMETER
+    horn_height = 10,
     horn_clearance = 1,
 
     beam_width = 150,
     beam_length = SERVO_SHAFT_HEIGHT,
-    beam_height = 2,
+    beam_height = 8,
     beam_clearance = 3,
 
     tolerance = .2,
@@ -70,6 +70,18 @@ module buttonpusher(
         }
     }
 
+    module _horn() {
+        _x = servo_x;
+        _y = servo_mount_y + wall + SERVO_HEIGHT + tolerance;
+        _z = MOUNT_HEIGHT + horn_clearance;
+        translate([_x, _y, _z]) oval_horn(
+            horn_width,
+            horn_length,
+            horn_height,
+            SERVO_SHAFT_DIAMETER + tolerance * 2
+        );
+    }
+
     module servo_cavity(bleed = tolerance, shaft_bleed = 0) {
         _servo(bleed, shaft_bleed);
     }
@@ -90,7 +102,7 @@ module buttonpusher(
         }
     }
 
-    module beam(_wall = 1) {
+    module beam(_wall = 2, extension = 5) {
         _y = BUTTON_Y - beam_length / 2;
         _z = ZR_BUTTON_STILT + MOUNT_HEIGHT + beam_clearance;
 
@@ -103,24 +115,14 @@ module buttonpusher(
             );
         }
 
-        module _u_beam() {
-            difference() {
-                # cube([beam_width, beam_length, beam_height]);
-
-                translate([-e, _wall, -e]) {
-                    cube([
-                        beam_width + e * 2,
-                        beam_length - _wall * 2,
-                        beam_height - _wall
-                    ]);
-                }
-            }
-        }
-
         difference() {
             union() {
-                translate([-beam_width + width + MOUNT_DEPTH + BUTTON_X, _y, _z]) {
-                    _u_beam();
+                translate([
+                    -beam_width + width + MOUNT_DEPTH + BUTTON_X + extension,
+                    _y,
+                    _z
+                ]) {
+                    cube([beam_width, beam_length, beam_height]);
                 }
 
                 _c(_wall);
@@ -179,13 +181,13 @@ module buttonpusher(
     }
 
     # _servo();
-    servo_mount();
-    beam();
-
     # _base_plank();
 
-    base();
+    _horn();
+    beam();
 
+    servo_mount();
+    # base();
     translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
 }
 
