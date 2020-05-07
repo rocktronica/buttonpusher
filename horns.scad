@@ -137,21 +137,22 @@ module oval_horn(
     }
 }
 
-module screw_horn() {
+module screw_horn(
+    tolerance = .2,
+    cap = 0
+) {
     HEIGHT = 4;
     TARGET_DIAMETER = 8;
     DISTANCE = 33.5;
-    DIAMETER = 8;
+    DIAMETER = 10;
     SCREW_HOLE_DIAMETER = 2;
     EXTENSION = 2;
     CLEARANCE = 1;
 
     SERVO_SHAFT_RECESS = SERVO_SHAFT_HEIGHT - CLEARANCE;
 
-    TOLERANCE = .2;
-
     $fn = 24;
-    e = 1.12345;
+    e = 0.012345;
 
     module _c(h = DIAMETER) {
         translate([DISTANCE, DIAMETER / 2, HEIGHT / 2])
@@ -177,18 +178,24 @@ module screw_horn() {
 
             _c();
             _c(DIAMETER + EXTENSION);
+
+            if (cap > 0) {
+                translate([0, 0, HEIGHT]) {
+                    cylinder(
+                        d = DIAMETER,
+                        h = cap
+                    );
+                }
+            }
         }
 
         translate([0, 0, -e])
         cylinder(
-            d = SCREW_HOLE_DIAMETER + TOLERANCE * 2,
-            h = HEIGHT + e * 2
+            d = SCREW_HOLE_DIAMETER + tolerance * 2,
+            h = HEIGHT + cap + e * 2
         );
 
-        translate([0, 0, HEIGHT - SERVO_SHAFT_RECESS])
-        cavity(
-            SERVO_SHAFT_DIAMETER + TOLERANCE * 2,
-            SERVO_SHAFT_RECESS + e
-        );
+        translate([0, 0, -e])
+        stock_horn_cavity(tolerance);
     }
 }
