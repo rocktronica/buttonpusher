@@ -109,7 +109,10 @@ module screw_horn() {
     DISTANCE = 33.5;
     DIAMETER = 8;
     SCREW_HOLE_DIAMETER = 2;
-    EXTENSION = 3;
+    EXTENSION = 2;
+    CLEARANCE = 1;
+
+    SERVO_SHAFT_RECESS = SERVO_SHAFT_HEIGHT - CLEARANCE;
 
     TOLERANCE = .2;
 
@@ -127,19 +130,16 @@ module screw_horn() {
 
     difference() {
         union() {
-            hull() {
-                cylinder(
-                    d = DIAMETER,
-                    h = HEIGHT
-                );
+            cylinder(
+                d = DIAMETER,
+                h = HEIGHT
+            );
 
-                translate([0, DIAMETER / -2, 0]) {
-                    cube([DISTANCE, DIAMETER, HEIGHT]);
-                }
-
-                _c();
+            translate([0, DIAMETER / -2, 0]) {
+                cube([DISTANCE, DIAMETER, HEIGHT]);
             }
 
+            _c();
             _c(DIAMETER + EXTENSION);
         }
 
@@ -149,10 +149,10 @@ module screw_horn() {
             h = HEIGHT + e * 2
         );
 
-        translate([0, 0, HEIGHT - SERVO_SHAFT_HEIGHT])
-        cylinder(
-            h = SERVO_SHAFT_HEIGHT + e,
-            d = SERVO_SHAFT_DIAMETER + TOLERANCE * 2
+        translate([0, 0, HEIGHT - SERVO_SHAFT_RECESS])
+        cavity(
+            SERVO_SHAFT_DIAMETER + TOLERANCE * 2,
+            SERVO_SHAFT_RECESS + e
         );
     }
 }
