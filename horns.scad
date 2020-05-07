@@ -16,14 +16,16 @@ module cavity(
             d = diameter
         );
 
-        for (i = [0 : shim_count - 1]) {
-            rotate([0, 0, i * 360 / shim_count]) {
-                translate([
-                    shim_width / -2,
-                    diameter / 2 - shim_length,
-                    -e
-                ]) {
-                    cube([shim_width, shim_length, _height + e * 2]);
+        if (shim_count > 0) {
+            for (i = [0 : shim_count - 1]) {
+                rotate([0, 0, i * 360 / shim_count]) {
+                    translate([
+                        shim_width / -2,
+                        diameter / 2 - shim_length,
+                        -e
+                    ]) {
+                        cube([shim_width, shim_length, _height + e * 2]);
+                    }
                 }
             }
         }
