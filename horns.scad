@@ -128,6 +128,8 @@ module screw_horn() {
         );
     }
 
+    translate([0, HEIGHT, 0])
+    rotate([90, 0, 0])
     difference() {
         union() {
             cylinder(
@@ -156,5 +158,3 @@ module screw_horn() {
         );
     }
 }
-
-screw_horn();
