@@ -1,3 +1,5 @@
+include <servo.scad>;
+
 module cavity(
     diameter,
     length,
@@ -60,6 +62,18 @@ module arm_horn(
     }
 }
 
+module svg_horn(height = 0, bleed = 0) {
+    linear_extrude(height) {
+        offset(bleed) {
+            import(
+                file = "horn_scan_2.svg",
+                center = true,
+                dpi = 300
+            );
+        }
+    }
+}
+
 module oval_horn(
     width,
     length,
@@ -88,3 +102,59 @@ module oval_horn(
         }
     }
 }
+
+module screw_horn() {
+    HEIGHT = 4;
+    TARGET_DIAMETER = 8;
+    DISTANCE = 33.5;
+    DIAMETER = 8;
+    SCREW_HOLE_DIAMETER = 2;
+    EXTENSION = 3;
+
+    TOLERANCE = .2;
+
+    $fn = 24;
+    e = 1.12345;
+
+    module _c(h = DIAMETER) {
+        translate([DISTANCE, DIAMETER / 2, HEIGHT / 2])
+        rotate([90, 0, 0])
+        cylinder(
+            d = TARGET_DIAMETER,
+            h = h
+        );
+    }
+
+    difference() {
+        union() {
+            hull() {
+                cylinder(
+                    d = DIAMETER,
+                    h = HEIGHT
+                );
+
+                translate([0, DIAMETER / -2, 0]) {
+                    cube([DISTANCE, DIAMETER, HEIGHT]);
+                }
+
+                _c();
+            }
+
+            _c(DIAMETER + EXTENSION);
+        }
+
+        translate([0, 0, -e])
+        cylinder(
+            d = SCREW_HOLE_DIAMETER + TOLERANCE * 2,
+            h = HEIGHT + e * 2
+        );
+
+        translate([0, 0, HEIGHT - SERVO_SHAFT_HEIGHT])
+        cylinder(
+            h = SERVO_SHAFT_HEIGHT + e,
+            d = SERVO_SHAFT_DIAMETER + TOLERANCE * 2
+        );
+    }
+}
+
+screw_horn();
