@@ -32,6 +32,38 @@ module cavity(
     }
 }
 
+module stock_horn_cavity(
+    bleed = 0,
+    diameter = 7.3,
+    height = 4.2,
+    fin_count = 1,
+    fin_length = 16.2,
+    fin_width = 5.8,
+    fin_height = 1.7,
+    fin_end_diameter = 4.2,
+
+    $fn = 24
+) {
+    module _c(diameter, height, distance = 0) {
+        translate([0, distance, 0]) {
+            cylinder(
+                d = diameter + bleed * 2,
+                h = height + bleed
+            );
+        }
+    }
+
+    _c(diameter, height);
+    for (i = [0 : fin_count]) {
+        hull() {
+            rotate([0, 0, (i / fin_count) * 360 - 90]) {
+                _c(fin_width, fin_height);
+                _c(fin_end_diameter, fin_height, fin_length);
+            }
+        }
+    }
+}
+
 module arm_horn(
     width,
     length,
