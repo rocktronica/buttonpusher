@@ -19,7 +19,15 @@ SERVO_SHAFT_X = 6;
 SERVO_CABLE_Z = 4.6;
 SERVO_CABLE_HEIGHT = 2;
 
-module servo(bleed = 0, shaft_bleed = 0) {
+module servo(
+    bleed = 0,
+    shaft_bleed = 0,
+
+    show_fins = true,
+    show_shaft = true,
+    show_cable = true,
+    show_base = true
+) {
     width = SERVO_WIDTH + bleed * 2;
     length = SERVO_LENGTH + bleed * 2;
     height = SERVO_HEIGHT + bleed * 2;
@@ -58,14 +66,18 @@ module servo(bleed = 0, shaft_bleed = 0) {
         }
     }
 
+    module base() {
+        cube([width, length, height]);
+    }
+
     translate([
         -bleed - shaft_x,
         -bleed - length / 2,
         -bleed
     ]) {
-        fins();
-        shaft();
-        cable();
-        cube([width, length, height]);
+        if (show_fins) { fins(); }
+        if (show_shaft) { shaft(); }
+        if (show_cable) { cable(); }
+        if (show_base) { base(); }
     }
 }

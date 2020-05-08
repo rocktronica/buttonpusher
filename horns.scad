@@ -142,14 +142,14 @@ module oval_horn(
 }
 
 module hammer_horn(
+    distance = 33.5,
+    extension = 2,
     tolerance = .1 // snap fit
 ) {
     HEIGHT = 4;
     TARGET_DIAMETER = 8;
-    DISTANCE = 33.5;
     DIAMETER = 10;
     SCREW_HOLE_DIAMETER = 2;
-    EXTENSION = 2;
     CLEARANCE = 1;
 
     SERVO_SHAFT_RECESS = SERVO_SHAFT_HEIGHT - CLEARANCE;
@@ -158,7 +158,7 @@ module hammer_horn(
     e = 0.012345;
 
     module _c(h = DIAMETER) {
-        translate([DISTANCE, DIAMETER / 2, HEIGHT / 2])
+        translate([distance, DIAMETER / 2, HEIGHT / 2])
         rotate([90, 0, 0])
         cylinder(
             d = TARGET_DIAMETER,
@@ -166,15 +166,15 @@ module hammer_horn(
         );
     }
 
-    module _head(h = DIAMETER + EXTENSION) {
+    module _head(h = DIAMETER + extension) {
         render() difference() {
             union() {
                 _c(h);
             }
 
             translate([
-                DISTANCE - TARGET_DIAMETER / 2,
-                DIAMETER / -2 - EXTENSION,
+                distance - TARGET_DIAMETER / 2,
+                DIAMETER / -2 - extension,
                 HEIGHT
             ]) {
                 cube([
@@ -196,7 +196,7 @@ module hammer_horn(
             );
 
             translate([0, DIAMETER / -2, 0]) {
-                cube([DISTANCE, DIAMETER, HEIGHT]);
+                cube([distance, DIAMETER, HEIGHT]);
             }
 
             _head();
