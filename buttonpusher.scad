@@ -44,10 +44,13 @@ module buttonpusher(
     }
 
     module _horn() {
-        _x = servo_x;
-        _y = servo_mount_y + wall + SERVO_HEIGHT + tolerance;
-        _z = servo_cavity_z;
-        translate([_x, _y, _z]) screw_horn();
+        translate([
+            servo_x,
+            servo_mount_y + wall + SERVO_HEIGHT + tolerance,
+            servo_cavity_z
+        ]) {
+            hammer_horn();
+        }
     }
 
     module servo_cavity(bleed = tolerance, shaft_bleed = 0) {

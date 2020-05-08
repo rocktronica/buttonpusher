@@ -45,7 +45,7 @@ module stock_horn_cavity(
     $fn = 24
 ) {
     module _c(diameter, height, distance = 0) {
-        translate([0, distance, 0]) {
+        translate([0, distance > 0 ? distance + bleed : 0, 0]) {
             cylinder(
                 d = diameter + bleed * 2,
                 h = height + bleed
@@ -58,7 +58,11 @@ module stock_horn_cavity(
         hull() {
             rotate([0, 0, (i / fin_count) * 360 - 90]) {
                 _c(fin_width, fin_height);
-                _c(fin_end_diameter, fin_height, fin_length);
+                _c(
+                    fin_end_diameter,
+                    fin_height,
+                    fin_length - fin_end_diameter / 2
+                );
             }
         }
     }
@@ -137,9 +141,8 @@ module oval_horn(
     }
 }
 
-module screw_horn(
-    tolerance = .2,
-    cap = 0
+module hammer_horn(
+    tolerance = .1 // snap fit
 ) {
     HEIGHT = 4;
     TARGET_DIAMETER = 8;
@@ -163,6 +166,26 @@ module screw_horn(
         );
     }
 
+    module _head(h = DIAMETER + EXTENSION) {
+        render() difference() {
+            union() {
+                _c(h);
+            }
+
+            translate([
+                DISTANCE - TARGET_DIAMETER / 2,
+                DIAMETER / -2 - EXTENSION,
+                HEIGHT
+            ]) {
+                cube([
+                    TARGET_DIAMETER,
+                    h,
+                    TARGET_DIAMETER
+                ]);
+            }
+        }
+    }
+
     translate([0, HEIGHT, 0])
     rotate([90, 0, 0])
     difference() {
@@ -176,23 +199,13 @@ module screw_horn(
                 cube([DISTANCE, DIAMETER, HEIGHT]);
             }
 
-            _c();
-            _c(DIAMETER + EXTENSION);
-
-            if (cap > 0) {
-                translate([0, 0, HEIGHT]) {
-                    cylinder(
-                        d = DIAMETER,
-                        h = cap
-                    );
-                }
-            }
+            _head();
         }
 
         translate([0, 0, -e])
         cylinder(
             d = SCREW_HOLE_DIAMETER + tolerance * 2,
-            h = HEIGHT + cap + e * 2
+            h = HEIGHT + e * 2
         );
 
         translate([0, 0, -e])
