@@ -72,9 +72,15 @@ module buttonpusher(
     }
 
     module base() {
-        cube([width, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
-        translate([width, 0, 0]) {
-            cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
+        difference() {
+            union() {
+                cube([width, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
+                translate([width, 0, 0]) {
+                    cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
+                }
+            }
+
+            servo_cavity();
         }
     }
 
