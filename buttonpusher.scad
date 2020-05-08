@@ -10,13 +10,19 @@ module buttonpusher(
     horn_height = 10,
     horn_clearance = 1,
 
+    VISUALIZE_JOYCON = true,
+
     tolerance = .2,
     $fn = 12
 ) {
     ZR_BUTTON_STILT = 8;
 
+    JOYCON_WIDTH = 33;
+    JOYCON_LENGTH = 101;
+    JOYCON_HEIGHT = 14;
     BUTTON_X = 23;
     BUTTON_Y = 75;
+    BUTTON_HEIGHT = 2;
 
     e = .005678;
 
@@ -91,6 +97,23 @@ module buttonpusher(
     servo_mount();
     base();
     translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
+
+    if (VISUALIZE_JOYCON) {
+        # translate([width + MOUNT_DEPTH, 0, ZR_BUTTON_STILT]) {
+            cube([
+                JOYCON_WIDTH,
+                JOYCON_LENGTH,
+                JOYCON_HEIGHT
+            ]);
+
+            translate([BUTTON_X, BUTTON_Y, JOYCON_HEIGHT]) {
+                cylinder(
+                    d = 8,
+                    h = BUTTON_HEIGHT
+                );
+            }
+        }
+    }
 }
 
 buttonpusher();
