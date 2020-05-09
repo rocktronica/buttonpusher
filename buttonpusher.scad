@@ -9,7 +9,7 @@ module buttonpusher(
     horn_clearance = 1,
     wall = 2,
 
-    VISUALIZE_JOYCON = true,
+    VISUALIZE_PERIPHERALS = true,
 
     tolerance = .2,
     $fn = 12
@@ -134,7 +134,9 @@ module buttonpusher(
     base();
     translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
 
-    if (VISUALIZE_JOYCON) {
+    if (VISUALIZE_PERIPHERALS) {
+        # translate([tolerance, 0, 0]) _servo();
+
         # translate([width + MOUNT_DEPTH, 0, ZR_BUTTON_STILT]) {
             cube([
                 JOYCON_WIDTH,
@@ -152,4 +154,6 @@ module buttonpusher(
     }
 }
 
-buttonpusher();
+buttonpusher(
+    VISUALIZE_PERIPHERALS = false
+);
