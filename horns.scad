@@ -142,6 +142,7 @@ module oval_horn(
 }
 
 module hammer_horn(
+    angle = 0, // 12 o'clock, straight up
     distance = 33.5,
     extension = 2,
     tolerance = .1 // snap fit
@@ -187,7 +188,7 @@ module hammer_horn(
     }
 
     translate([0, HEIGHT, 0])
-    rotate([90, 0, 0])
+    rotate([90, angle - 90, 0])
     difference() {
         union() {
             cylinder(
