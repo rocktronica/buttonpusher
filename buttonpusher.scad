@@ -11,15 +11,12 @@ module buttonpusher(
 
     VISUALIZE_PERIPHERALS = true,
 
-    horn_angle = 90,
-
     tolerance = .2,
     $fn = 12
 ) {
-    ZR_BUTTON_STILT = 8;
-
-    min_height = ZR_BUTTON_STILT + MOUNT_HEIGHT;
     width = SERVO_LENGTH + wall * 2 + tolerance * 2;
+
+    ZR_BUTTON_STILT = 8;
 
     JOYCON_WIDTH = 33;
     JOYCON_LENGTH = 101;
@@ -32,17 +29,8 @@ module buttonpusher(
     e = .005678;
 
     servo_x = wall + SERVO_LENGTH / 2;
-    horn_distance = (width - servo_x) + MOUNT_DEPTH + JOYCON_BUTTON_X
-        - tolerance;
-
-    stilt = max(
-        ZR_BUTTON_STILT,
-        horn_distance - SERVO_SHAFT_X + wall + horn_clearance - MOUNT_HEIGHT
-    );
-    base_height = MOUNT_HEIGHT + stilt;
-
     servo_y = JOYCON_BUTTON_Y - SERVO_SHAFT_DIAMETER / 2 - SERVO_HEIGHT;
-    servo_z = base_height
+    servo_z = ZR_BUTTON_STILT + MOUNT_HEIGHT
         + JOYCON_BUTTON_HEIGHT + horn_clearance
         + horn_height / 2;
 
@@ -79,8 +67,8 @@ module buttonpusher(
             servo_z
         ]) {
             hammer_horn(
-                angle = horn_angle,
-                distance = horn_distance,
+                distance = (width - servo_x) + MOUNT_DEPTH + JOYCON_BUTTON_X
+                    - tolerance,
                 extension = JOYCON_BUTTON_HEIGHT
             );
         }
@@ -131,17 +119,17 @@ module buttonpusher(
                 translate([0, servo_y - wall, 0]) {
                     cube([
                         width,
-                        SERVO_HEIGHT + tolerance + wall - e,
-                        base_height
+                        SERVO_HEIGHT + tolerance * 2 + wall * 2,
+                        ZR_BUTTON_STILT + MOUNT_HEIGHT
                     ]);
                 }
 
                 translate([width - wall, 0, 0]) {
-                    cube([wall, MOUNT_LENGTH, base_height]);
+                    cube([wall, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
                 }
 
                 translate([width, 0, 0]) {
-                    cube([MOUNT_DEPTH, MOUNT_LENGTH, stilt]);
+                    cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
                 }
             }
 
@@ -152,12 +140,8 @@ module buttonpusher(
             cube([
                 JOYCON_WIDTH,
                 SERVO_HEIGHT + tolerance * 2,
-                stilt
+                ZR_BUTTON_STILT
             ]);
-        }
-
-        translate([width, 0, stilt]) {
-            mount(fdm = true, tolerance = tolerance);
         }
     }
 
@@ -165,11 +149,12 @@ module buttonpusher(
 
     servo_tabs();
     base();
+    translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
 
     if (VISUALIZE_PERIPHERALS) {
         # translate([tolerance, 0, 0]) _servo();
 
-        # translate([width + MOUNT_DEPTH, 0, stilt + e]) {
+        # translate([width + MOUNT_DEPTH, 0, ZR_BUTTON_STILT]) {
             cube([
                 JOYCON_WIDTH,
                 JOYCON_LENGTH,
@@ -187,6 +172,5 @@ module buttonpusher(
 }
 
 buttonpusher(
-    horn_angle = 180,
-    VISUALIZE_PERIPHERALS = true
+    VISUALIZE_PERIPHERALS = false
 );
