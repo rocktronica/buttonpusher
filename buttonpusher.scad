@@ -36,6 +36,8 @@ module buttonpusher(
 
     horn_y = servo_y + SERVO_HEIGHT + tolerance;
 
+    servo_tabs_y = servo_y - tolerance;
+
     module _servo(
         bleed = 0,
         show_fins = true,
@@ -72,13 +74,11 @@ module buttonpusher(
         }
     }
 
-    module servo_tab(
+    module servo_tabs(
         _width = wall,
         _length = SERVO_HEIGHT + tolerance * 2
     ) {
-        _y = servo_y - tolerance;
-        _z = ZR_BUTTON_STILT + MOUNT_HEIGHT - e;
-        _height = (servo_z + SERVO_SHAFT_X) - _z + e;
+        _height = (servo_z + SERVO_SHAFT_X) + e;
 
         module _wall() {
             cube([_width, _length, _height]);
@@ -97,7 +97,7 @@ module buttonpusher(
         difference() {
             union() {
                 for (_x = [0, width - _width]) {
-                    translate([_x, _y, _z]) {
+                    translate([_x, servo_tabs_y, 0]) {
                         _wall();
                     }
                 }
@@ -116,7 +116,18 @@ module buttonpusher(
     module base() {
         difference() {
             union() {
-                cube([width, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
+                translate([0, servo_y - wall, 0]) {
+                    cube([
+                        width,
+                        SERVO_HEIGHT + tolerance * 2 + wall * 2,
+                        ZR_BUTTON_STILT + MOUNT_HEIGHT
+                    ]);
+                }
+
+                translate([width - wall, 0, 0]) {
+                    cube([wall, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
+                }
+
                 translate([width, 0, 0]) {
                     cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
                 }
@@ -124,13 +135,19 @@ module buttonpusher(
 
             _servo(bleed = tolerance);
         }
-    }
 
-    # translate([tolerance, 0, 0]) _servo();
+        translate([width + MOUNT_DEPTH, servo_tabs_y - e, 0]) {
+            cube([
+                JOYCON_WIDTH,
+                SERVO_HEIGHT + tolerance * 2,
+                ZR_BUTTON_STILT
+            ]);
+        }
+    }
 
     _horn();
 
-    servo_tab();
+    servo_tabs();
     base();
     translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
 
