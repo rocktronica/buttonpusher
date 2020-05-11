@@ -76,7 +76,8 @@ module buttonpusher(
 
     module servo_tabs(
         _width = wall,
-        _length = SERVO_HEIGHT + tolerance * 2
+        _length = SERVO_HEIGHT + tolerance * 2,
+        _support_width = wall * 3
     ) {
         _height = (servo_z + SERVO_SHAFT_X) + e;
 
@@ -94,6 +95,21 @@ module buttonpusher(
             }
         }
 
+        module _side_supports() {
+            for (_y = [
+                servo_tabs_y,
+                servo_tabs_y + SERVO_HEIGHT - _width
+            ]) {
+                translate([-_support_width, _y, 0]) {
+                    cube([
+                        _support_width + e,
+                        _width,
+                        _height
+                    ]);
+                }
+            }
+        }
+
         difference() {
             union() {
                 for (_x = [0, width - _width]) {
@@ -101,6 +117,8 @@ module buttonpusher(
                         _wall();
                     }
                 }
+
+                _side_supports();
             }
 
             _servo(
