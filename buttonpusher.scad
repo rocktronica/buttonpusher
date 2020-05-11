@@ -133,6 +133,26 @@ module buttonpusher(
     }
 
     module base() {
+        module _stool(
+            _width = JOYCON_WIDTH * .75,
+            _length = SERVO_FULL_HEIGHT + tolerance * 2,
+            _height = ZR_BUTTON_STILT - tolerance * 1
+        ) {
+            translate([width + MOUNT_DEPTH - e, servo_tabs_y - e, 0]) {
+                difference() {
+                    cube([_width + e, _length, _height]);
+
+                    translate([-e, wall, -e]) {
+                        cube([
+                            _width - wall + e,
+                            _length - wall * 2,
+                            _height + e * 2
+                        ]);
+                    }
+                }
+            }
+        }
+
         difference() {
             union() {
                 translate([0, servo_y - wall, 0]) {
@@ -155,13 +175,7 @@ module buttonpusher(
             _servo(bleed = tolerance);
         }
 
-        translate([width + MOUNT_DEPTH, servo_tabs_y - e, 0]) {
-            cube([
-                JOYCON_WIDTH,
-                SERVO_FULL_HEIGHT + tolerance * 2,
-                ZR_BUTTON_STILT
-            ]);
-        }
+        _stool();
     }
 
     _horn();
