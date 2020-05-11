@@ -67,6 +67,13 @@ CRAFT_SEQUENCE = [
     },
 ]
 
+WISH_ON_A_STAR_SEQUENCE = [
+    {
+        "seconds": 1.5,
+        "description": 'Wish on a possible star'
+    },
+]
+
 def get_time_per_item(sequence):
     return reduce(
         lambda a, b: a + b,
