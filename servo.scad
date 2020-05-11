@@ -6,7 +6,9 @@ side facing camera, shaft up
 
 SERVO_WIDTH = 22.7;
 SERVO_LENGTH =12.5;
-SERVO_HEIGHT = 26.9; // includes cylinder around motor on top
+SERVO_AXLE_BASE_HEIGHT = 4.3;
+SERVO_AXLE_BASE_WIDTH = 14.5;
+SERVO_FULL_HEIGHT = 26.9;
 
 SERVO_FIN_WIDTH = 4.8;
 SERVO_FIN_HEIGHT = 2.4;
@@ -30,7 +32,10 @@ module servo(
 ) {
     width = SERVO_WIDTH + bleed * 2;
     length = SERVO_LENGTH + bleed * 2;
-    height = SERVO_HEIGHT + bleed * 2;
+    height = SERVO_FULL_HEIGHT + bleed * 2;
+
+    axle_base_height = SERVO_AXLE_BASE_HEIGHT + bleed * 2;
+    axle_base_width = SERVO_AXLE_BASE_WIDTH + bleed * 2;
 
     fin_width = SERVO_FIN_WIDTH + bleed;
     fin_height = SERVO_FIN_HEIGHT + bleed;
@@ -67,7 +72,11 @@ module servo(
     }
 
     module base() {
-        cube([width, length, height]);
+        cube([width, length, height - SERVO_AXLE_BASE_HEIGHT]);
+
+        translate([0, 0, height - axle_base_height]) {
+            cube([axle_base_width, length, axle_base_height]);
+        }
     }
 
     translate([

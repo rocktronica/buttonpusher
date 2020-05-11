@@ -29,12 +29,12 @@ module buttonpusher(
     e = .005678;
 
     servo_x = wall + SERVO_LENGTH / 2;
-    servo_y = JOYCON_BUTTON_Y - SERVO_SHAFT_DIAMETER / 2 - SERVO_HEIGHT;
+    servo_y = JOYCON_BUTTON_Y - SERVO_SHAFT_DIAMETER / 2 - SERVO_FULL_HEIGHT;
     servo_z = ZR_BUTTON_STILT + MOUNT_HEIGHT
         + JOYCON_BUTTON_HEIGHT + horn_clearance
         + horn_height / 2;
 
-    horn_y = servo_y + SERVO_HEIGHT + tolerance;
+    horn_y = servo_y + SERVO_FULL_HEIGHT + tolerance;
 
     servo_tabs_y = servo_y - tolerance;
 
@@ -76,7 +76,7 @@ module buttonpusher(
 
     module servo_tabs(
         _width = wall,
-        _length = SERVO_HEIGHT + tolerance * 2,
+        _length = SERVO_FULL_HEIGHT + tolerance * 2,
         _support_width = wall * 3
     ) {
         _height = (servo_z + SERVO_SHAFT_X) + e;
@@ -98,7 +98,7 @@ module buttonpusher(
         module _side_supports() {
             for (_y = [
                 servo_tabs_y,
-                servo_tabs_y + SERVO_HEIGHT - _width
+                servo_tabs_y + SERVO_FULL_HEIGHT - _width
             ]) {
                 translate([-_support_width, _y, 0]) {
                     cube([
@@ -137,7 +137,7 @@ module buttonpusher(
                 translate([0, servo_y - wall, 0]) {
                     cube([
                         width,
-                        SERVO_HEIGHT + tolerance * 2 + wall * 2,
+                        SERVO_FULL_HEIGHT + tolerance * 2 + wall * 2,
                         ZR_BUTTON_STILT + MOUNT_HEIGHT
                     ]);
                 }
@@ -157,7 +157,7 @@ module buttonpusher(
         translate([width + MOUNT_DEPTH, servo_tabs_y - e, 0]) {
             cube([
                 JOYCON_WIDTH,
-                SERVO_HEIGHT + tolerance * 2,
+                SERVO_FULL_HEIGHT + tolerance * 2,
                 ZR_BUTTON_STILT
             ]);
         }
