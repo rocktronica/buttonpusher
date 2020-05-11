@@ -7,6 +7,8 @@ from functools import reduce
 pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=5)
 my_servo = servo.Servo(pwm)
 
+CLICK_PRESS_DURATION = .2
+
 DEFAULT = 0
 REST = 90
 PRESSED = REST + 7
@@ -137,7 +139,7 @@ def run(sequence = [], count = 0):
                 )
             )
 
-            time.sleep(item.get("seconds"))
+            time.sleep(item.get("seconds") - CLICK_PRESS_DURATION)
             click()
 
             print(
@@ -160,9 +162,9 @@ def run(sequence = [], count = 0):
 def setAngle(angle):
     my_servo.angle = angle
 
-def click(pressLength = .2):
+def click():
     setAngle(PRESSED)
-    time.sleep(pressLength)
+    time.sleep(CLICK_PRESS_DURATION)
     setAngle(REST)
 
 def main():
