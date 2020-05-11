@@ -11,7 +11,8 @@ module buttonpusher(
 
     VISUALIZE_PERIPHERALS = true,
 
-    tolerance = .2,
+    tolerance = .1,
+    loose_tolerance = .2,
     $fn = 12
 ) {
     width = SERVO_LENGTH + wall * 2 + tolerance * 2;
@@ -167,7 +168,9 @@ module buttonpusher(
 
     servo_tabs();
     base();
-    translate([width, 0, ZR_BUTTON_STILT]) mount(3, fdm = true, tolerance = tolerance);
+    translate([width, 0, ZR_BUTTON_STILT]) {
+        mount(3, fdm = true, tolerance = loose_tolerance);
+    }
 
     if (VISUALIZE_PERIPHERALS) {
         # translate([tolerance, 0, 0]) _servo();
