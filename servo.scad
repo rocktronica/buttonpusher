@@ -80,8 +80,8 @@ module servo(
     }
 
     translate([
-        -bleed - shaft_x,
-        -bleed - length / 2,
+        -shaft_x,
+        -length / 2,
         -bleed
     ]) {
         if (show_fins) { fins(); }
