@@ -1,12 +1,15 @@
 include <mount.scad>;
 include <servo.scad>;
 include <horns.scad>;
+include <animation.scad>;
 
 module buttonpusher(
     horn_width = 20,
     horn_length = SERVO_SHAFT_HEIGHT,
     horn_height = 10,
     horn_clearance = 1,
+    horn_angle = 0,
+
     wall = 2,
 
     VISUALIZE_PERIPHERALS = true,
@@ -68,6 +71,7 @@ module buttonpusher(
             servo_z
         ]) {
             hammer_horn(
+                angle = horn_angle,
                 distance = (width - servo_x) + MOUNT_DEPTH + JOYCON_BUTTON_X
                     - tolerance,
                 extension = JOYCON_BUTTON_HEIGHT
@@ -189,14 +193,14 @@ module buttonpusher(
     if (VISUALIZE_PERIPHERALS) {
         # translate([tolerance, 0, 0]) _servo();
 
-        # translate([width + MOUNT_DEPTH, 0, ZR_BUTTON_STILT]) {
+        # translate([width + MOUNT_DEPTH - e, 0, ZR_BUTTON_STILT]) {
             cube([
                 JOYCON_WIDTH,
                 JOYCON_LENGTH,
                 JOYCON_HEIGHT
             ]);
 
-            translate([JOYCON_BUTTON_X, JOYCON_BUTTON_Y, JOYCON_HEIGHT]) {
+            translate([JOYCON_BUTTON_X , JOYCON_BUTTON_Y, JOYCON_HEIGHT]) {
                 cylinder(
                     d = JOYCON_BUTTON_DIAMETER,
                     h = JOYCON_BUTTON_HEIGHT
@@ -207,5 +211,6 @@ module buttonpusher(
 }
 
 buttonpusher(
-    VISUALIZE_PERIPHERALS = false
+    VISUALIZE_PERIPHERALS = true,
+    horn_angle = 90 * ease_in_out_quad(undulate($t))
 );
