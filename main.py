@@ -74,6 +74,13 @@ WISH_ON_A_STAR_SEQUENCE = [
     },
 ]
 
+DEBUG_SEQUENCE = [
+    {
+        "seconds": 1,
+        "description": 'Debug'
+    },
+]
+
 def get_time_per_item(sequence):
     return reduce(
         lambda a, b: a + b,
@@ -124,8 +131,21 @@ def get_sequence_percent_complete(
             / (len(sequence) * count)
             * 100
         )
+def setAngle(angle):
+    my_servo.angle = angle
+
+def click():
+    setAngle(PRESSED)
+    time.sleep(CLICK_PRESS_DURATION)
+    setAngle(REST)
+
 
 def run(sequence = [], count = 0):
+    print()
+
+    setAngle(DEFAULT)
+    time.sleep(1)
+
     setAngle(REST)
 
     for item_index in range(0, count, 1):
@@ -166,33 +186,7 @@ def run(sequence = [], count = 0):
 
     print("All done!!")
 
-def setAngle(angle):
-    my_servo.angle = angle
-
-def click():
-    setAngle(PRESSED)
-    time.sleep(CLICK_PRESS_DURATION)
-    setAngle(REST)
-
-def main():
-    print()
-    setAngle(DEFAULT)
-    time.sleep(1)
-
-    run(CRAFT_SEQUENCE, 10)
-
     setAngle(PRESSED)
     time.sleep(.1)
 
-def debug():
-    while True:
-        setAngle(DEFAULT)
-        time.sleep(1)
-        setAngle(REST)
-        time.sleep(1)
-        setAngle(PRESSED)
-        time.sleep(1)
-        setAngle(REST)
-        time.sleep(1)
-
-debug()
+run(DEBUG_SEQUENCE, 10)
