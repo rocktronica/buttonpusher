@@ -23,7 +23,7 @@ REDEEM_NOOK_MILES_SEQUENCE = [
         "description": 'Redeem ...?',
     },
     {
-        "seconds": .5,
+        "seconds": .75,
         "description": 'Confirm',
     },
     {
@@ -39,7 +39,7 @@ REDEEM_NOOK_MILES_SEQUENCE = [
         "description": 'put item away and make another selection',
     },
     {
-        "seconds": .5,
+        "seconds": .75,
         "description": 'confirm dialog',
     },
 ]
@@ -50,11 +50,11 @@ CRAFT_SEQUENCE = [
         "description": 'Wait for menu and select item'
     },
     {
-        "seconds": .5,
+        "seconds": .75,
         "description": 'Craft it!'
     },
     {
-        "seconds": .5,
+        "seconds": .75,
         "description": 'Confirm'
     },
     {
@@ -62,7 +62,7 @@ CRAFT_SEQUENCE = [
         "description": 'Make item and receive it'
     },
     {
-        "seconds": .5,
+        "seconds": .75,
         "description": 'Keep crafting'
     },
 ]
