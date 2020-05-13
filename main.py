@@ -186,7 +186,7 @@ def run(sequence = [], count = 0):
 
     print("All done!!")
 
-    setAngle(PRESSED)
-    time.sleep(.1)
+    setAngle(DEFAULT)
+    time.sleep(1)
 
 run(DEBUG_SEQUENCE, 10)
