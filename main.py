@@ -4,14 +4,22 @@ import pulseio
 from adafruit_motor import servo
 from functools import reduce
 
-pwm = pulseio.PWMOut(board.A1, duty_cycle=2 ** 15, frequency=5)
-my_servo = servo.Servo(pwm)
+class PIN():
+    SERVO = board.A1
+
+class ANGLE():
+    DEFAULT = 0
+    REST = 90
+    PRESSED = 97
+
+hammer_servo = servo.Servo(
+    pulseio.PWMOut(PIN.SERVO, duty_cycle=2 ** 15, frequency=5)
+)
+
+def setAngle(angle):
+    hammer_servo.angle = angle
 
 CLICK_PRESS_DURATION = .2
-
-DEFAULT = 0
-REST = 90
-PRESSED = REST + 7
 
 REDEEM_NOOK_MILES_SEQUENCE = [
     {
@@ -131,22 +139,20 @@ def get_sequence_percent_complete(
             / (len(sequence) * count)
             * 100
         )
-def setAngle(angle):
-    my_servo.angle = angle
 
 def click():
-    setAngle(PRESSED)
+    setAngle(ANGLE.PRESSED)
     time.sleep(CLICK_PRESS_DURATION)
-    setAngle(REST)
+    setAngle(ANGLE.REST)
 
 
 def run(sequence = [], count = 0):
     print()
 
-    setAngle(DEFAULT)
+    setAngle(ANGLE.DEFAULT)
     time.sleep(1)
 
-    setAngle(REST)
+    setAngle(ANGLE.REST)
 
     for item_index in range(0, count, 1):
         print(
@@ -186,7 +192,7 @@ def run(sequence = [], count = 0):
 
     print("All done!!")
 
-    setAngle(DEFAULT)
+    setAngle(ANGLE.DEFAULT)
     time.sleep(1)
 
 run(DEBUG_SEQUENCE, 10)
