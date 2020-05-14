@@ -12,12 +12,16 @@ class ANGLE():
     REST = 90
     PRESSED = 97
 
-hammer_servo = servo.Servo(
-    pulseio.PWMOut(PIN.SERVO, duty_cycle=2 ** 15, frequency=5)
-)
+class Hammer():
+    def __init__(self, pin):
+        self._servo = servo.Servo(
+            pulseio.PWMOut(pin, duty_cycle=2 ** 15, frequency=5)
+        )
 
-def setAngle(angle):
-    hammer_servo.angle = angle
+    def setAngle(self, angle):
+        self._servo.angle = angle
+
+hammer = Hammer(PIN.SERVO)
 
 CLICK_PRESS_DURATION = .2
 
@@ -141,18 +145,18 @@ def get_sequence_percent_complete(
         )
 
 def click():
-    setAngle(ANGLE.PRESSED)
+    hammer.setAngle(ANGLE.PRESSED)
     time.sleep(CLICK_PRESS_DURATION)
-    setAngle(ANGLE.REST)
+    hammer.setAngle(ANGLE.REST)
 
 
 def run(sequence = [], count = 0):
     print()
 
-    setAngle(ANGLE.DEFAULT)
+    hammer.setAngle(ANGLE.DEFAULT)
     time.sleep(1)
 
-    setAngle(ANGLE.REST)
+    hammer.setAngle(ANGLE.REST)
 
     for item_index in range(0, count, 1):
         print(
@@ -192,7 +196,7 @@ def run(sequence = [], count = 0):
 
     print("All done!!")
 
-    setAngle(ANGLE.DEFAULT)
+    hammer.setAngle(ANGLE.DEFAULT)
     time.sleep(1)
 
 run(DEBUG_SEQUENCE, 10)
