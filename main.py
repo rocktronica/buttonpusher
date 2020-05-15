@@ -6,12 +6,11 @@ from functools import reduce
 import rotaryio
 import digitalio
 
-class ANGLE():
+class Hammer():
     DEFAULT = 0
     REST = 90
     PRESSED = 97
 
-class Hammer():
     def __init__(self, pin):
         self._servo = servo.Servo(
             pulseio.PWMOut(pin, duty_cycle=2 ** 15, frequency=5)
@@ -19,6 +18,10 @@ class Hammer():
 
     def setAngle(self, angle):
         self._servo.angle = angle
+
+    def default(self): self.setAngle(self.DEFAULT)
+    def rest(self): self.setAngle(self.REST)
+    def pressed(self): self.setAngle(self.PRESSED)
 
 class Menu():
     def __init__(self, pin_up, pin_down, pin_button):
@@ -187,17 +190,17 @@ def get_sequence_percent_complete(
         )
 
 def click():
-    hammer.setAngle(ANGLE.PRESSED)
+    hammer.pressed()
     time.sleep(CLICK_PRESS_DURATION)
-    hammer.setAngle(ANGLE.REST)
+    hammer.rest()
 
 def run(sequence = [], count = 0):
     print()
 
-    hammer.setAngle(ANGLE.DEFAULT)
+    hammer.default()
     time.sleep(1)
 
-    hammer.setAngle(ANGLE.REST)
+    hammer.rest()
 
     for item_index in range(0, count, 1):
         print(
@@ -235,7 +238,7 @@ def run(sequence = [], count = 0):
 
     print("All done!!")
 
-    hammer.setAngle(ANGLE.DEFAULT)
+    hammer.default()
     time.sleep(1)
 
 while True:
