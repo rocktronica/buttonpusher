@@ -160,15 +160,19 @@ class Display():
 display = Display()
 
 class Menu():
-    def __init__(self, pin_up, pin_down, confirm_button):
+    def __init__(self, pin_up, pin_down, confirm_button, cancel_button):
         self.encoder_previous_position = None
         self.encoder = rotaryio.IncrementalEncoder(pin_up, pin_down)
         self.confirm_button = confirm_button
+        self.cancel_button = cancel_button
 
-    def choice(self, prompt, options = []):
+    def choice(self, prompt, options = [], is_cancelable = False):
         i = 0
         offset = self.encoder_previous_position or 0
-        button_pressed = False # TODO: ditch this
+
+         # TODO: ditch these
+        confirm_button_pressed = False
+        cancel_button_pressed = False
 
         selection = options[0]
 
@@ -185,10 +189,16 @@ class Menu():
 
                 display.choice(prompt, selection)
 
-            if not self.confirm_button.is_pressed() and not button_pressed:
-                button_pressed = True
-            if self.confirm_button.is_pressed() and button_pressed:
+            if not self.confirm_button.is_pressed() and not confirm_button_pressed:
+                confirm_button_pressed = True
+            if self.confirm_button.is_pressed() and confirm_button_pressed:
                 break
+
+            if is_cancelable:
+                if not self.cancel_button.is_pressed() and not cancel_button_pressed:
+                    cancel_button_pressed = True
+                if self.cancel_button.is_pressed() and cancel_button_pressed:
+                    return (None, 0)
 
         return (selection, i)
 
@@ -199,7 +209,7 @@ confirm_button = Button(board.A4)
 
 wait = Wait(cancel_button)
 hammer = Hammer(board.A1, wait)
-menu = Menu(board.A3, board.A2, confirm_button)
+menu = Menu(board.A3, board.A2, confirm_button, cancel_button)
 
 def run(sequence = [], count = 0):
     display.start_sequence()
@@ -309,10 +319,16 @@ SEQUENCES = [
 while True:
     hammer.default()
 
-    (_, sequence_i) = menu.choice(
-        "Choose sequence:",
-        list(map(lambda seq: seq.get("text"), SEQUENCES))
-    )
-    (count, _) = menu.choice("How many?", range(1, 101, 1))
+    count = None
+    while count is None:
+        (_, sequence_i) = menu.choice(
+            "Choose sequence:",
+            list(map(lambda seq: seq.get("text"), SEQUENCES))
+        )
+        (count, _) = menu.choice(
+            "How many?",
+            range(1, 101, 1),
+            True
+        )
 
     run(SEQUENCES[sequence_i].get("value"), count)
