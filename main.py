@@ -70,74 +70,6 @@ menu = Menu(board.A3, board.A2, board.A4)
 
 CLICK_PRESS_DURATION = .2
 
-REDEEM_NOOK_MILES_SEQUENCE = [
-    {
-        "seconds": 2.5,
-        "description": 'Wait for menu and select item',
-    },
-    {
-        "seconds": 3,
-        "description": 'Redeem ...?',
-    },
-    {
-        "seconds": .75,
-        "description": 'Confirm',
-    },
-    {
-        "seconds": 8,
-        "description": 'Wait for item and receive',
-    },
-    {
-        "seconds": 2.5,
-        "description": 'click through explanation',
-    },
-    {
-        "seconds": 4.5,
-        "description": 'put item away and make another selection',
-    },
-    {
-        "seconds": .75,
-        "description": 'confirm dialog',
-    },
-]
-
-CRAFT_SEQUENCE = [
-    {
-        "seconds": 3,
-        "description": 'Wait for menu and select item'
-    },
-    {
-        "seconds": .75,
-        "description": 'Craft it!'
-    },
-    {
-        "seconds": .75,
-        "description": 'Confirm'
-    },
-    {
-        "seconds": 7,
-        "description": 'Make item and receive it'
-    },
-    {
-        "seconds": .75,
-        "description": 'Keep crafting'
-    },
-]
-
-WISH_ON_A_STAR_SEQUENCE = [
-    {
-        "seconds": 1.5,
-        "description": 'Wish on a possible star'
-    },
-]
-
-DEBUG_SEQUENCE = [
-    {
-        "seconds": 1,
-        "description": 'Debug'
-    },
-]
-
 def get_time_per_item(sequence):
     return reduce(
         lambda a, b: a + b,
@@ -241,22 +173,87 @@ def run(sequence = [], count = 0):
     hammer.default()
     time.sleep(1)
 
+REDEEM_NOOK_MILES_SEQUENCE = [
+    {
+        "seconds": 2.5,
+        "description": 'Wait for menu and select item',
+    },
+    {
+        "seconds": 3,
+        "description": 'Redeem ...?',
+    },
+    {
+        "seconds": .75,
+        "description": 'Confirm',
+    },
+    {
+        "seconds": 8,
+        "description": 'Wait for item and receive',
+    },
+    {
+        "seconds": 2.5,
+        "description": 'click through explanation',
+    },
+    {
+        "seconds": 4.5,
+        "description": 'put item away and make another selection',
+    },
+    {
+        "seconds": .75,
+        "description": 'confirm dialog',
+    },
+]
+CRAFT_SEQUENCE = [
+    {
+        "seconds": 3,
+        "description": 'Wait for menu and select item'
+    },
+    {
+        "seconds": .75,
+        "description": 'Craft it!'
+    },
+    {
+        "seconds": .75,
+        "description": 'Confirm'
+    },
+    {
+        "seconds": 7,
+        "description": 'Make item and receive it'
+    },
+    {
+        "seconds": .75,
+        "description": 'Keep crafting'
+    },
+]
+WISH_ON_A_STAR_SEQUENCE = [
+    {
+        "seconds": 1.5,
+        "description": 'Wish on a possible star'
+    },
+]
+DEBUG_SEQUENCE = [
+    {
+        "seconds": 1,
+        "description": 'Debug'
+    },
+]
+
+SEQUENCES = [
+    {"text": "Redeem Nook Miles", "value": REDEEM_NOOK_MILES_SEQUENCE},
+    {"text": "Craft item", "value": CRAFT_SEQUENCE},
+    {"text": "Wish on a star", "value": WISH_ON_A_STAR_SEQUENCE},
+    {"text": "Debug", "value": DEBUG_SEQUENCE},
+]
+
 while True:
     hammer.setAngle(0)
 
-    (_, sequence_i) = menu.choice("Choose sequence:", [
-        "Redeem Nook Miles",
-        "Craft item",
-        "Wish on a star",
-        "Debug"
-    ])
+    (_, sequence_i) = menu.choice(
+        "Choose sequence:",
+        list(map(lambda seq: seq.get("text"), SEQUENCES))
+    )
     (count, _) = menu.choice("How many?", range(1, 101, 1))
 
-    run([
-        REDEEM_NOOK_MILES_SEQUENCE,
-        CRAFT_SEQUENCE,
-        WISH_ON_A_STAR_SEQUENCE,
-        DEBUG_SEQUENCE
-    ][sequence_i], count)
+    run(SEQUENCES[sequence_i].get("value"), count)
 
     print()
