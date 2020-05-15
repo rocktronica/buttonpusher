@@ -23,6 +23,11 @@ class Hammer():
     def rest(self): self.setAngle(self.REST)
     def pressed(self): self.setAngle(self.PRESSED)
 
+    def click(self):
+        self.pressed()
+        time.sleep(CLICK_PRESS_DURATION)
+        self.rest()
+
 class Display():
     def get_time_per_item(self, sequence):
         return reduce(
@@ -164,11 +169,6 @@ menu = Menu(board.A3, board.A2, board.A4)
 
 CLICK_PRESS_DURATION = .2
 
-def click():
-    hammer.pressed()
-    time.sleep(CLICK_PRESS_DURATION)
-    hammer.rest()
-
 def run(sequence = [], count = 0):
     display.start_sequence()
 
@@ -184,7 +184,7 @@ def run(sequence = [], count = 0):
             display.start_step(step_index, item)
 
             time.sleep(item.get("seconds") - CLICK_PRESS_DURATION)
-            click()
+            hammer.click()
 
             display.end_step(step_index, sequence, item_index, count)
 
