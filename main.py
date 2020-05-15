@@ -6,12 +6,6 @@ from functools import reduce
 import rotaryio
 import digitalio
 
-class PIN():
-    SERVO = board.A1
-    ROTARY_ENCODER_A = board.A3
-    ROTARY_ENCODER_B = board.A2
-    BUTTON = board.A4
-
 class ANGLE():
     DEFAULT = 0
     REST = 90
@@ -68,8 +62,8 @@ class Menu():
 
         return (selection, i)
 
-hammer = Hammer(PIN.SERVO)
-menu = Menu(PIN.ROTARY_ENCODER_A, PIN.ROTARY_ENCODER_B, PIN.BUTTON)
+hammer = Hammer(board.A1)
+menu = Menu(board.A3, board.A2, board.A4)
 
 CLICK_PRESS_DURATION = .2
 
