@@ -41,12 +41,12 @@ class Hammer():
         )
         self.wait = wait
 
-    def setAngle(self, angle):
+    def _setAngle(self, angle):
         self._servo.angle = angle
 
-    def default(self): self.setAngle(self.DEFAULT)
-    def rest(self): self.setAngle(self.REST)
-    def pressed(self): self.setAngle(self.PRESSED)
+    def default(self): self._setAngle(self.DEFAULT)
+    def rest(self): self._setAngle(self.REST)
+    def pressed(self): self._setAngle(self.PRESSED)
 
     def click(self):
         self.pressed()
@@ -303,7 +303,7 @@ SEQUENCES = [
 ]
 
 while True:
-    hammer.setAngle(0)
+    hammer.default()
 
     (_, sequence_i) = menu.choice(
         "Choose sequence:",
