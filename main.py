@@ -1,4 +1,4 @@
-import time
+from time import sleep
 import board
 import pulseio
 from adafruit_motor import servo
@@ -6,15 +6,40 @@ from functools import reduce
 import rotaryio
 import digitalio
 
+class Wait():
+    def __init__(self, pin_cancel):
+        self.pin_cancel = pin_cancel
+
+        self.button = digitalio.DigitalInOut(pin_cancel)
+        self.button.direction = digitalio.Direction.INPUT
+        self.button.pull = digitalio.Pull.DOWN
+
+    def sleep(self, seconds):
+        sleep(seconds)
+
+    def interruptible_sleep(self, seconds, increment = .01):
+        interrupted = False
+
+        while seconds > 0 and not self.button.value:
+            sleep(increment)
+            seconds = seconds - increment
+
+            if self.button.value:
+                interrupted = True
+                break
+
+        return interrupted
+
 class Hammer():
     DEFAULT = 0
     REST = 90
     PRESSED = 97
 
-    def __init__(self, pin):
+    def __init__(self, pin, wait):
         self._servo = servo.Servo(
             pulseio.PWMOut(pin, duty_cycle=2 ** 15, frequency=5)
         )
+        self.wait = wait
 
     def setAngle(self, angle):
         self._servo.angle = angle
@@ -25,7 +50,7 @@ class Hammer():
 
     def click(self):
         self.pressed()
-        time.sleep(CLICK_PRESS_DURATION)
+        self.wait.sleep(CLICK_PRESS_DURATION)
         self.rest()
 
 class Display():
@@ -117,8 +142,11 @@ class Display():
         )
         print()
 
-    def end_sequence(self):
-        print("All done!!")
+    def end_sequence(self, halt):
+        if halt:
+            print("Halted prematurely")
+        else:
+            print("All done!!")
         print()
 
     def choice(self, prompt, selection):
@@ -163,34 +191,44 @@ class Menu():
 
         return (selection, i)
 
-hammer = Hammer(board.A1)
-menu = Menu(board.A3, board.A2, board.A4)
-
 CLICK_PRESS_DURATION = .2
+
+wait = Wait(board.A5)
+hammer = Hammer(board.A1, wait)
+menu = Menu(board.A3, board.A2, board.A4)
 
 def run(sequence = [], count = 0):
     display.start_sequence()
 
     hammer.default()
-    time.sleep(1)
+    wait.sleep(1)
 
     hammer.rest()
 
+    halt = False
+
     for item_index in range(0, count, 1):
+        if halt: break
+
         display.start_item(item_index, count)
 
         for step_index, item in enumerate(sequence):
             display.start_step(step_index, item)
 
-            time.sleep(item.get("seconds") - CLICK_PRESS_DURATION)
+            halt = wait.interruptible_sleep(
+                item.get("seconds") - CLICK_PRESS_DURATION
+            )
+
+            if halt: break
+
             hammer.click()
 
             display.end_step(step_index, sequence, item_index, count)
 
-    display.end_sequence()
+    display.end_sequence(halt)
 
     hammer.default()
-    time.sleep(1)
+    wait.sleep(1)
 
 REDEEM_NOOK_MILES_SEQUENCE = [
     {
