@@ -23,6 +23,104 @@ class Hammer():
     def rest(self): self.setAngle(self.REST)
     def pressed(self): self.setAngle(self.PRESSED)
 
+class Display():
+    def get_time_per_item(self, sequence):
+        return reduce(
+            lambda a, b: a + b,
+            map(
+                lambda x: x.get("seconds"),
+                sequence
+            )
+        )
+
+    def get_time_per_item_at_step(self, sequence, step_index):
+        return reduce(
+            lambda a, b: a + b,
+            map(
+                lambda x: x[1].get("seconds") if (x[0] < step_index) else 0,
+                enumerate(sequence)
+            )
+        )
+
+    def get_item_percent_complete(
+        self,
+        step_index,
+        sequence,
+        by_time = True
+    ):
+        if (by_time):
+            completed_time = self.get_time_per_item_at_step(sequence, step_index)
+            return round(completed_time / self.get_time_per_item(sequence) * 100)
+        else:
+            return round(step_index / len(sequence) * 100)
+
+    def get_sequence_percent_complete(
+        self,
+        item_index,
+        step_index,
+        sequence,
+        count,
+        by_time = True
+    ):
+        if (by_time):
+            time_per_item = self.get_time_per_item(sequence)
+            time_elapsed = (
+                time_per_item * item_index
+                + self.get_time_per_item_at_step(sequence, step_index)
+            )
+            time_total = time_per_item * count
+            return round(time_elapsed / time_total * 100)
+        else:
+            return round(
+                (item_index * len(sequence) + step_index)
+                / (len(sequence) * count)
+                * 100
+            )
+
+    def start_sequence(self):
+        print()
+
+    def start_item(self, item_index, count):
+        print(
+            "Making item {} of {}:".format(
+                item_index + 1,
+                count
+            )
+        )
+        print()
+
+    def start_step(self, step_index, item):
+        print(
+            "  {}: {} seconds to {}".format(
+                step_index + 1,
+                item.get("seconds"),
+                item.get("description")
+            )
+        )
+
+    def end_step(self, step_index, sequence, item_index, count):
+        print(
+            "  Item {}% complete. Sequence {}% complete.".format(
+                self.get_item_percent_complete(step_index + 1, sequence),
+                self.get_sequence_percent_complete(
+                    item_index,
+                    step_index + 1,
+                    sequence,
+                    count
+                )
+            )
+        )
+        print()
+
+    def end_sequence(self):
+        print("All done!!")
+        print()
+
+    def choice(self, prompt, selection):
+        print(prompt, selection)
+
+display = Display()
+
 class Menu():
     def __init__(self, pin_up, pin_down, pin_button):
         self.encoder_previous_position = None
@@ -40,11 +138,7 @@ class Menu():
 
         selection = options[0]
 
-        print(prompt)
-
-        # TODO: or if inheriting a encoder_previous_position?
-        if offset > 0:
-            print(selection)
+        display.choice(prompt, selection)
 
         while True:
             position = self.encoder.position
@@ -55,7 +149,7 @@ class Menu():
                 selection = options[i]
                 self.encoder_previous_position = position
 
-                print(selection)
+                display.choice(prompt, selection)
 
             if not self.button.value and not button_pressed:
                 button_pressed = True
@@ -70,64 +164,13 @@ menu = Menu(board.A3, board.A2, board.A4)
 
 CLICK_PRESS_DURATION = .2
 
-def get_time_per_item(sequence):
-    return reduce(
-        lambda a, b: a + b,
-        map(
-            lambda x: x.get("seconds"),
-            sequence
-        )
-    )
-
-def get_time_per_item_at_step(sequence, step_index):
-    return reduce(
-        lambda a, b: a + b,
-        map(
-            lambda x: x[1].get("seconds") if (x[0] < step_index) else 0,
-            enumerate(sequence)
-        )
-    )
-
-def get_item_percent_complete(
-    step_index,
-    sequence,
-    by_time = True
-):
-    if (by_time):
-        completed_time = get_time_per_item_at_step(sequence, step_index)
-        return round(completed_time / get_time_per_item(sequence) * 100)
-    else:
-        return round(step_index / len(sequence) * 100)
-
-def get_sequence_percent_complete(
-    item_index,
-    step_index,
-    sequence,
-    count,
-    by_time = True
-):
-    if (by_time):
-        time_per_item = get_time_per_item(sequence)
-        time_elapsed = (
-            time_per_item * item_index
-            + get_time_per_item_at_step(sequence, step_index)
-        )
-        time_total = time_per_item * count
-        return round(time_elapsed / time_total * 100)
-    else:
-        return round(
-            (item_index * len(sequence) + step_index)
-            / (len(sequence) * count)
-            * 100
-        )
-
 def click():
     hammer.pressed()
     time.sleep(CLICK_PRESS_DURATION)
     hammer.rest()
 
 def run(sequence = [], count = 0):
-    print()
+    display.start_sequence()
 
     hammer.default()
     time.sleep(1)
@@ -135,40 +178,17 @@ def run(sequence = [], count = 0):
     hammer.rest()
 
     for item_index in range(0, count, 1):
-        print(
-            "Making item {} of {}:".format(
-                item_index + 1,
-                count
-            )
-        )
-        print()
+        display.start_item(item_index, count)
 
         for step_index, item in enumerate(sequence):
-            print(
-                "  {}: {} seconds to {}".format(
-                    step_index + 1,
-                    item.get("seconds"),
-                    item.get("description")
-                )
-            )
+            display.start_step(step_index, item)
 
             time.sleep(item.get("seconds") - CLICK_PRESS_DURATION)
             click()
 
-            print(
-                "  Item {}% complete. Sequence {}% complete.".format(
-                    get_item_percent_complete(step_index + 1, sequence),
-                    get_sequence_percent_complete(
-                        item_index,
-                        step_index + 1,
-                        sequence,
-                        count
-                    )
-                )
-            )
-            print()
+            display.end_step(step_index, sequence, item_index, count)
 
-    print("All done!!")
+    display.end_sequence()
 
     hammer.default()
     time.sleep(1)
@@ -255,5 +275,3 @@ while True:
     (count, _) = menu.choice("How many?", range(1, 101, 1))
 
     run(SEQUENCES[sequence_i].get("value"), count)
-
-    print()
