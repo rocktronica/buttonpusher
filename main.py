@@ -6,13 +6,18 @@ from functools import reduce
 import rotaryio
 import digitalio
 
-class Wait():
-    def __init__(self, pin_cancel):
-        self.pin_cancel = pin_cancel
+class Button():
+    def __init__(self, pin):
+        self._button = digitalio.DigitalInOut(pin)
+        self._button.direction = digitalio.Direction.INPUT
+        self._button.pull = digitalio.Pull.DOWN
 
-        self.button = digitalio.DigitalInOut(pin_cancel)
-        self.button.direction = digitalio.Direction.INPUT
-        self.button.pull = digitalio.Pull.DOWN
+    def is_pressed(self):
+        return self._button.value
+
+class Wait():
+    def __init__(self, cancel_button):
+        self.cancel_button = cancel_button
 
     def sleep(self, seconds):
         sleep(seconds)
@@ -20,11 +25,11 @@ class Wait():
     def interruptible_sleep(self, seconds, increment = .01):
         interrupted = False
 
-        while seconds > 0 and not self.button.value:
+        while seconds > 0 and not self.cancel_button.is_pressed():
             sleep(increment)
             seconds = seconds - increment
 
-            if self.button.value:
+            if self.cancel_button.is_pressed():
                 interrupted = True
                 break
 
@@ -155,19 +160,15 @@ class Display():
 display = Display()
 
 class Menu():
-    def __init__(self, pin_up, pin_down, pin_button):
+    def __init__(self, pin_up, pin_down, confirm_button):
         self.encoder_previous_position = None
-
         self.encoder = rotaryio.IncrementalEncoder(pin_up, pin_down)
-
-        self.button = digitalio.DigitalInOut(pin_button)
-        self.button.direction = digitalio.Direction.INPUT
-        self.button.pull = digitalio.Pull.DOWN
+        self.confirm_button = confirm_button
 
     def choice(self, prompt, options = []):
         i = 0
         offset = self.encoder_previous_position or 0
-        button_pressed = False
+        button_pressed = False # TODO: ditch this
 
         selection = options[0]
 
@@ -184,18 +185,21 @@ class Menu():
 
                 display.choice(prompt, selection)
 
-            if not self.button.value and not button_pressed:
+            if not self.confirm_button.is_pressed() and not button_pressed:
                 button_pressed = True
-            if self.button.value and button_pressed:
+            if self.confirm_button.is_pressed() and button_pressed:
                 break
 
         return (selection, i)
 
 CLICK_PRESS_DURATION = .2
 
-wait = Wait(board.A5)
+cancel_button = Button(board.A5)
+confirm_button = Button(board.A4)
+
+wait = Wait(cancel_button)
 hammer = Hammer(board.A1, wait)
-menu = Menu(board.A3, board.A2, board.A4)
+menu = Menu(board.A3, board.A2, confirm_button)
 
 def run(sequence = [], count = 0):
     display.start_sequence()
