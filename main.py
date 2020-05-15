@@ -3,9 +3,14 @@ import board
 import pulseio
 from adafruit_motor import servo
 from functools import reduce
+import rotaryio
+import digitalio
 
 class PIN():
     SERVO = board.A1
+    ROTARY_ENCODER_A = board.A3
+    ROTARY_ENCODER_B = board.A2
+    BUTTON = board.A4
 
 class ANGLE():
     DEFAULT = 0
@@ -21,7 +26,50 @@ class Hammer():
     def setAngle(self, angle):
         self._servo.angle = angle
 
+class Menu():
+    def __init__(self, pin_up, pin_down, pin_button):
+        self.encoder_previous_position = None
+
+        self.encoder = rotaryio.IncrementalEncoder(pin_up, pin_down)
+
+        self.button = digitalio.DigitalInOut(pin_button)
+        self.button.direction = digitalio.Direction.INPUT
+        self.button.pull = digitalio.Pull.UP
+
+    def choice(self, prompt, options = []):
+        i = 0
+        offset = self.encoder_previous_position or 0
+        button_pressed = False
+
+        selection = options[0]
+
+        print(prompt)
+
+        # TODO: or if inheriting a encoder_previous_position?
+        if offset > 0:
+            print(selection)
+
+        while True:
+            position = self.encoder.position
+
+            if position != self.encoder_previous_position:
+                i = (position - offset) % len(options)
+
+                selection = options[i]
+                self.encoder_previous_position = position
+
+                print(selection)
+
+            if not self.button.value and not button_pressed:
+                button_pressed = True
+            if self.button.value and button_pressed:
+                break
+                button_pressed = False
+
+        return (selection, i)
+
 hammer = Hammer(PIN.SERVO)
+menu = Menu(PIN.ROTARY_ENCODER_A, PIN.ROTARY_ENCODER_B, PIN.BUTTON)
 
 CLICK_PRESS_DURATION = .2
 
@@ -149,7 +197,6 @@ def click():
     time.sleep(CLICK_PRESS_DURATION)
     hammer.setAngle(ANGLE.REST)
 
-
 def run(sequence = [], count = 0):
     print()
 
@@ -192,11 +239,27 @@ def run(sequence = [], count = 0):
             )
             print()
 
-        print()
-
     print("All done!!")
 
     hammer.setAngle(ANGLE.DEFAULT)
     time.sleep(1)
 
-run(DEBUG_SEQUENCE, 10)
+while True:
+    hammer.setAngle(0)
+
+    (_, sequence_i) = menu.choice("Choose sequence:", [
+        "Redeem Nook Miles",
+        "Craft item",
+        "Wish on a star",
+        "Debug"
+    ])
+    (count, _) = menu.choice("How many?", range(1, 101, 1))
+
+    run([
+        REDEEM_NOOK_MILES_SEQUENCE,
+        CRAFT_SEQUENCE,
+        WISH_ON_A_STAR_SEQUENCE,
+        DEBUG_SEQUENCE
+    ][sequence_i], count)
+
+    print()
