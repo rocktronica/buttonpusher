@@ -134,7 +134,7 @@ class Menu():
 
         self.button = digitalio.DigitalInOut(pin_button)
         self.button.direction = digitalio.Direction.INPUT
-        self.button.pull = digitalio.Pull.UP
+        self.button.pull = digitalio.Pull.DOWN
 
     def choice(self, prompt, options = []):
         i = 0
@@ -160,7 +160,6 @@ class Menu():
                 button_pressed = True
             if self.button.value and button_pressed:
                 break
-                button_pressed = False
 
         return (selection, i)
 
