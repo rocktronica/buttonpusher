@@ -12,8 +12,18 @@ class Button():
         self._button.direction = digitalio.Direction.INPUT
         self._button.pull = digitalio.Pull.DOWN
 
+        self._value = False
+
+    def reset(self):
+        self._value = False
+
     def is_pressed(self):
-        return self._button.value
+        if self._value and self._button.value:
+            return True
+        elif not self._value and not self._button.value:
+            self._value = True
+
+        return False
 
 class Wait():
     def __init__(self, cancel_button):
@@ -170,9 +180,8 @@ class Menu():
         i = 0
         offset = self.encoder_previous_position or 0
 
-         # TODO: ditch these
-        confirm_button_pressed = False
-        cancel_button_pressed = False
+        self.confirm_button.reset()
+        self.cancel_button.reset()
 
         selection = options[0]
 
@@ -189,16 +198,11 @@ class Menu():
 
                 display.choice(prompt, selection)
 
-            if not self.confirm_button.is_pressed() and not confirm_button_pressed:
-                confirm_button_pressed = True
-            if self.confirm_button.is_pressed() and confirm_button_pressed:
+            if self.confirm_button.is_pressed():
                 break
 
-            if is_cancelable:
-                if not self.cancel_button.is_pressed() and not cancel_button_pressed:
-                    cancel_button_pressed = True
-                if self.cancel_button.is_pressed() and cancel_button_pressed:
-                    return (None, 0)
+            if is_cancelable and self.cancel_button.is_pressed():
+                return (None, 0)
 
         return (selection, i)
 
