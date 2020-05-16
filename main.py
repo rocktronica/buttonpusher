@@ -54,11 +54,11 @@ while True:
     count = None
     while count is None:
         (_, sequence_i) = menu.choice(
-            "Choose sequence:",
+            "Sequence",
             list(map(lambda seq: seq.get("text"), SEQUENCES))
         )
         (count, _) = menu.choice(
-            "How many?",
+            "Count",
             range(1, 101, 1),
             True
         )
