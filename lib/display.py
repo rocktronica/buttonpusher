@@ -45,7 +45,7 @@ class Display():
         return reduce(
             lambda a, b: a + b,
             map(
-                lambda x: x.get("seconds"),
+                lambda x: x,
                 sequence
             )
         )
@@ -54,7 +54,7 @@ class Display():
         return reduce(
             lambda a, b: a + b,
             map(
-                lambda x: x[1].get("seconds") if (x[0] < step_index) else 0,
+                lambda x: x[1] if (x[0] < step_index) else 0,
                 enumerate(sequence)
             )
         )
@@ -106,12 +106,11 @@ class Display():
         )
         self.print()
 
-    def start_step(self, step_index, item):
+    def start_step(self, step_index, seconds):
         self.print(
-            "  {}: {} seconds to {}".format(
+            "  {}: {} seconds".format(
                 step_index + 1,
-                item.get("seconds"),
-                item.get("description")
+                seconds
             )
         )
 

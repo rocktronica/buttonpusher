@@ -1,66 +1,24 @@
 REDEEM_NOOK_MILES_SEQUENCE = [
-    {
-        "seconds": 2.5,
-        "description": 'Wait for menu and select item',
-    },
-    {
-        "seconds": 3,
-        "description": 'Redeem ...?',
-    },
-    {
-        "seconds": .75,
-        "description": 'Confirm',
-    },
-    {
-        "seconds": 8,
-        "description": 'Wait for item and receive',
-    },
-    {
-        "seconds": 2.5,
-        "description": 'click through explanation',
-    },
-    {
-        "seconds": 4.5,
-        "description": 'put item away and make another selection',
-    },
-    {
-        "seconds": .75,
-        "description": 'confirm dialog',
-    },
+    2.5, # Wait for menu and select item
+    3, # Redeem ...?
+    .75, # Confirm
+    8, # Wait for item and receive
+    2.5, # click through explanation
+    4.5, # put item away and make another selection
+    .75, # confirm dialog
 ]
 CRAFT_SEQUENCE = [
-    {
-        "seconds": 3,
-        "description": 'Wait for menu and select item'
-    },
-    {
-        "seconds": .75,
-        "description": 'Craft it!'
-    },
-    {
-        "seconds": .75,
-        "description": 'Confirm'
-    },
-    {
-        "seconds": 7,
-        "description": 'Make item and receive it'
-    },
-    {
-        "seconds": .75,
-        "description": 'Keep crafting'
-    },
+    3, # Wait for menu and select item
+    .75, # Craft it!
+    .75, # Confirm
+    7, # Make item and receive it
+    .75, # Keep crafting
 ]
 WISH_ON_A_STAR_SEQUENCE = [
-    {
-        "seconds": 1.5,
-        "description": 'Wish on a possible star'
-    },
+    1.5, # Wish on a possible star
 ]
 DEBUG_SEQUENCE = [
-    {
-        "seconds": 1,
-        "description": 'Debug'
-    },
+    1, # Debug
 ]
 
 SEQUENCES = [

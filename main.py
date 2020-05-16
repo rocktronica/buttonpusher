@@ -30,12 +30,10 @@ def run(sequence = [], count = 0):
 
         display.start_item(item_index, count)
 
-        for step_index, item in enumerate(sequence):
-            display.start_step(step_index, item)
+        for step_index, seconds in enumerate(sequence):
+            display.start_step(step_index, seconds)
 
-            halt = wait.interruptible_sleep(
-                item.get("seconds") - CLICK_PRESS_DURATION
-            )
+            halt = wait.interruptible_sleep(seconds - CLICK_PRESS_DURATION)
 
             if halt: break
 
