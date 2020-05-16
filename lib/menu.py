@@ -1,11 +1,19 @@
 import rotaryio
 
 class Menu():
-    def __init__(self, pin_up, pin_down, confirm_button, cancel_button):
+    def __init__(
+        self,
+        pin_up,
+        pin_down,
+        confirm_button,
+        cancel_button,
+        display
+    ):
         self.encoder_previous_position = None
         self.encoder = rotaryio.IncrementalEncoder(pin_up, pin_down)
         self.confirm_button = confirm_button
         self.cancel_button = cancel_button
+        self.display = display
 
     def choice(self, prompt, options = [], is_cancelable = False):
         i = 0
@@ -16,7 +24,7 @@ class Menu():
 
         selection = options[0]
 
-        display.choice(prompt, selection)
+        self.display.choice(prompt, selection)
 
         while True:
             position = self.encoder.position
@@ -27,7 +35,7 @@ class Menu():
                 selection = options[i]
                 self.encoder_previous_position = position
 
-                display.choice(prompt, selection)
+                self.display.choice(prompt, selection)
 
             if self.confirm_button.is_pressed():
                 break

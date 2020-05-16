@@ -14,7 +14,7 @@ confirm_button = Button(board.A4)
 
 wait = Wait(cancel_button)
 hammer = Hammer(board.A1, wait)
-menu = Menu(board.A3, board.A2, confirm_button, cancel_button)
+menu = Menu(board.A3, board.A2, confirm_button, cancel_button, display)
 
 def run(sequence = [], count = 0):
     display.start_sequence()
