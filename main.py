@@ -1,17 +1,16 @@
 import board
 
 from button import Button
+from display import Display
+from hammer import Hammer, CLICK_PRESS_DURATION
+from menu import Menu
 from sequences import SEQUENCES
 from wait import Wait
-from hammer import Hammer, CLICK_PRESS_DURATION
-from display import Display
-from menu import Menu
-
-display = Display()
 
 cancel_button = Button(board.A3)
 confirm_button = Button(board.A4)
 
+display = Display()
 wait = Wait(cancel_button)
 hammer = Hammer(board.A2, wait)
 menu = Menu(board.A5, board.A1, confirm_button, cancel_button, display)
