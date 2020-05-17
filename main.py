@@ -39,11 +39,6 @@ def run(sequence = [], count = 0):
 
 			hammer.click()
 
-	display.end_sequence()
-
-	hammer.default()
-	wait.sleep(1)
-
 while True:
 	hammer.default()
 

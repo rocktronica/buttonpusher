@@ -114,8 +114,5 @@ class Display():
 			)
 		)
 
-	def end_sequence(self):
-		self.print()
-
 	def choice(self, prompt, selection):
 		self.print("{}:\n{}".format(prompt, selection))
