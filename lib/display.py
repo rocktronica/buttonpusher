@@ -28,6 +28,8 @@ class Display():
 
         self.lcd = lcd
 
+        self.start_sequence([], 0)
+
     def print(self, line = ""):
         print(line)
         self.lcd.clear()
@@ -59,18 +61,6 @@ class Display():
             )
         )
 
-    def get_item_percent_complete(
-        self,
-        step_index,
-        sequence,
-        by_time = True
-    ):
-        if (by_time):
-            completed_time = self.get_time_per_item_at_step(sequence, step_index)
-            return round(completed_time / self.get_time_per_item(sequence) * 100)
-        else:
-            return round(step_index / len(sequence) * 100)
-
     def get_sequence_percent_complete(
         self,
         item_index,
@@ -94,46 +84,38 @@ class Display():
                 * 100
             )
 
-    def start_sequence(self):
-        self.print()
+    def start_sequence(self, sequence, count):
+        self.sequence = sequence
+        self.count = count
+        self.item_index = 0
+        self.step_index = 0
 
-    def start_item(self, item_index, count):
-        self.print(
-            "Making item {} of {}:".format(
-                item_index + 1,
-                count
-            )
-        )
-        self.print()
+    def start_item(self, item_index):
+        self.item_index = item_index
+        self.update()
 
-    def start_step(self, step_index, seconds):
-        self.print(
-            "  {}: {} seconds".format(
-                step_index + 1,
-                seconds
-            )
-        )
+    def start_step(self, step_index):
+        self.step_index = step_index
+        self.update()
 
-    def end_step(self, step_index, sequence, item_index, count):
+    def update(self):
         self.print(
-            "  Item {}% complete. Sequence {}% complete.".format(
-                self.get_item_percent_complete(step_index + 1, sequence),
+            "I: {}/{}  S:{}/{}\n{}% complete".format(
+                self.item_index + 1,
+                self.count,
+                self.step_index + 1,
+                len(self.sequence),
                 self.get_sequence_percent_complete(
-                    item_index,
-                    step_index + 1,
-                    sequence,
-                    count
+                    self.item_index,
+                    self.step_index,
+                    self.sequence,
+                    self.count
                 )
             )
         )
-        self.print()
 
-    def end_sequence(self, halt):
-        if halt:
-            self.print("Halted prematurely")
-        else:
-            self.print("All done!!")
+    def end_sequence(self):
         self.print()
 
     def choice(self, prompt, selection):
-        self.print("{}: {}".format(prompt, selection))
+        self.print("{}:\n{}".format(prompt, selection))
