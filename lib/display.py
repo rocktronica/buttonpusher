@@ -62,22 +62,14 @@ class Display():
 		step_index,
 		sequence,
 		count,
-		by_time = True
 	):
-		if (by_time):
-			time_per_item = self.get_time_per_item(sequence)
-			time_elapsed = (
-				time_per_item * item_index
-				+ self.get_time_per_item_at_step(sequence, step_index)
-			)
-			time_total = time_per_item * count
-			return round(time_elapsed / time_total * 100)
-		else:
-			return round(
-				(item_index * len(sequence) + step_index)
-				/ (len(sequence) * count)
-				* 100
-			)
+		time_per_item = self.get_time_per_item(sequence)
+		time_elapsed = (
+			time_per_item * item_index
+			+ self.get_time_per_item_at_step(sequence, step_index)
+		)
+		time_total = time_per_item * count
+		return round(time_elapsed / time_total * 100)
 
 	def start_sequence(self, sequence, count):
 		self.sequence = sequence
