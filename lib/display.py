@@ -6,27 +6,30 @@ import digitalio
 import adafruit_character_lcd.character_lcd as characterlcd
 
 class Display():
-	def __init__(self):
-		# Modify this if you have a different sized character LCD
-		lcd_columns = 16
+	def __init__(
+		self,
+		pin_lcd_rs,
+		pin_lcd_en,
+		pin_lcd_d7,
+		pin_lcd_d6,
+		pin_lcd_d5,
+		pin_lcd_d4,
+		pin_lcd_backlight,
+		lcd_columns = 16,
 		lcd_rows = 4
-
-		# Metro M0/M4 Pin Config:
-		lcd_rs = digitalio.DigitalInOut(board.D7) # 4
-		lcd_en = digitalio.DigitalInOut(board.D8) # 6?
-		lcd_d7 = digitalio.DigitalInOut(board.D12) # 14
-		lcd_d6 = digitalio.DigitalInOut(board.D11) # 13
-		lcd_d5 = digitalio.DigitalInOut(board.D10) # 12
-		lcd_d4 = digitalio.DigitalInOut(board.D9) # 11
-		lcd_backlight = digitalio.DigitalInOut(board.D13) # 15
-
-		# Initialise the LCD class
-		lcd = characterlcd.Character_LCD_Mono(
-			lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight
+	):
+		self.lcd = characterlcd.Character_LCD_Mono(
+			digitalio.DigitalInOut(pin_lcd_rs),
+			digitalio.DigitalInOut(pin_lcd_en),
+			digitalio.DigitalInOut(pin_lcd_d4),
+			digitalio.DigitalInOut(pin_lcd_d5),
+			digitalio.DigitalInOut(pin_lcd_d6),
+			digitalio.DigitalInOut(pin_lcd_d7),
+			lcd_columns,
+			lcd_rows,
+			digitalio.DigitalInOut(pin_lcd_backlight)
 		)
-		lcd.backlight = True
-
-		self.lcd = lcd
+		self.lcd.backlight = True
 
 		self.start_sequence([], 0)
 
