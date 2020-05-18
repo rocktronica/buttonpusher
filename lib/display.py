@@ -35,14 +35,6 @@ class Display():
 		self.lcd.clear()
 		self.lcd.message = line
 
-	def debug(self):
-		while True:
-			self.print("Hello world.")
-			time.sleep(2)
-
-			self.print("0123456789012345\n0123456789012345")
-			time.sleep(2)
-
 	def get_time_per_item(self, sequence):
 		return reduce(
 			lambda a, b: a + b,
