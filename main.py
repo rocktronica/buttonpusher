@@ -39,6 +39,9 @@ def run(sequence = [], count = 0):
 
 			hammer.click()
 
+sequence_i = 0
+count_i = 0
+
 while True:
 	hammer.default()
 
@@ -46,12 +49,14 @@ while True:
 	while count is None:
 		(_, sequence_i) = menu.choice(
 			"Sequence",
-			list(map(lambda seq: seq.get("text"), SEQUENCES))
+			list(map(lambda seq: seq.get("text"), SEQUENCES)),
+			default_selected_index = sequence_i
 		)
-		(count, _) = menu.choice(
+		(count, count_i) = menu.choice(
 			"Count",
 			range(1, 101, 1),
-			True
+			is_cancelable = True,
+			default_selected_index = count_i
 		)
 
 	run(SEQUENCES[sequence_i].get("value"), count)

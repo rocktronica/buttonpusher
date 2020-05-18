@@ -15,14 +15,20 @@ class Menu():
 		self.cancel_button = cancel_button
 		self.display = display
 
-	def choice(self, prompt, options = [], is_cancelable = False):
+	def choice(
+		self,
+		prompt,
+		options = [],
+		is_cancelable = False,
+		default_selected_index = 0
+	):
 		i = 0
 		offset = self.encoder_previous_position or 0
 
 		self.confirm_button.reset()
 		self.cancel_button.reset()
 
-		selection = options[0]
+		selection = options[default_selected_index]
 
 		self.display.choice(prompt, selection)
 
