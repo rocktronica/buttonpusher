@@ -37,44 +37,19 @@ class Display():
 		if clear: self.lcd.clear()
 		self.lcd.message = line
 
-	def get_time_per_item(self, sequence):
-		return reduce(
-			lambda a, b: a + b,
-			map(
-				lambda x: x,
-				sequence
-			)
-		)
+	def get_total_expected_time(self):
+		return sum(self.sequence) * self.count
 
-	def get_time_per_item_at_step(self, sequence, step_index):
-		return reduce(
-			lambda a, b: a + b,
-			map(
-				lambda x: x[1] if (x[0] < step_index) else 0,
-				enumerate(sequence)
-			)
-		)
-
-	def get_sequence_percent_complete(
-		self,
-		item_index,
-		step_index,
-		sequence,
-		count,
-	):
-		time_per_item = self.get_time_per_item(sequence)
-		time_elapsed = (
-			time_per_item * item_index
-			+ self.get_time_per_item_at_step(sequence, step_index)
-		)
-		time_total = time_per_item * count
-		return round(time_elapsed / time_total * 100)
+	def get_sequence_percent_complete(self):
+		total_expected_time = self.get_total_expected_time()
+		return round(self.seconds_elapsed / total_expected_time * 100)
 
 	def start_sequence(self, sequence, count):
 		self.sequence = sequence
 		self.count = count
 		self.item_index = 0
 		self.step_index = 0
+		self.seconds_elapsed = 0
 
 	def start_item(self, item_index):
 		self.item_index = item_index
@@ -84,19 +59,18 @@ class Display():
 		self.step_index = step_index
 		self.update()
 
+	def set_seconds_elapsed(self, seconds_elapsed):
+		self.seconds_elapsed = seconds_elapsed
+		self.update()
+
 	def update(self):
 		self.print(
-			"I: {}/{}  S:{}/{}\n{}% complete".format(
+			"I:{}/{} S:{}/{}\n{}%".format(
 				self.item_index + 1,
 				self.count,
 				self.step_index + 1,
 				len(self.sequence),
-				self.get_sequence_percent_complete(
-					self.item_index,
-					self.step_index,
-					self.sequence,
-					self.count
-				)
+				self.get_sequence_percent_complete()
 			),
 			clear = False
 		)
