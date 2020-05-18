@@ -1,4 +1,4 @@
-from time import sleep
+from time import monotonic, sleep
 
 class Wait():
 	def __init__(self, cancel_button):
@@ -7,15 +7,23 @@ class Wait():
 	def sleep(self, seconds):
 		sleep(seconds)
 
-	def interruptible_sleep(self, seconds, increment = .01):
+	def interruptible_sleep(self, seconds, fn, increment = .25):
+		start_time = monotonic()
 		interrupted = False
+		sleeping = True
 
-		while seconds > 0 and not self.cancel_button.is_pressed():
+		while sleeping:
 			sleep(increment)
-			seconds = seconds - increment
+
+			if fn: fn()
 
 			if self.cancel_button.is_pressed():
 				interrupted = True
 				break
+
+			sleeping = (
+				not interrupted
+				and monotonic() - start_time < seconds
+			)
 
 		return interrupted
