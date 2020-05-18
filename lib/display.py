@@ -33,9 +33,8 @@ class Display():
 
 		self.start_sequence([], 0)
 
-	def print(self, line = ""):
-		print(line)
-		self.lcd.clear()
+	def print(self, line = "", clear = True):
+		if clear: self.lcd.clear()
 		self.lcd.message = line
 
 	def get_time_per_item(self, sequence):
@@ -98,7 +97,8 @@ class Display():
 					self.sequence,
 					self.count
 				)
-			)
+			),
+			clear = False
 		)
 
 	def choice(self, prompt, selection):
