@@ -1,7 +1,7 @@
 from adafruit_character_lcd import character_lcd
 from digitalio import DigitalInOut
-from functools import reduce
 from time import monotonic
+from utils import get_sequence_percent_complete
 
 class Display():
 	def __init__(
@@ -35,13 +35,6 @@ class Display():
 		if clear: self.lcd.clear()
 		self.lcd.message = line
 
-	def get_total_expected_time(self):
-		return sum(self.sequence) * self.count
-
-	def get_sequence_percent_complete(self):
-		total_expected_time = self.get_total_expected_time()
-		return round(self.seconds_elapsed / total_expected_time * 100)
-
 	def start_sequence(self, sequence, count):
 		self.sequence = sequence
 		self.count = count
@@ -68,7 +61,9 @@ class Display():
 				self.count,
 				self.step_index + 1,
 				len(self.sequence),
-				self.get_sequence_percent_complete()
+				get_sequence_percent_complete(
+					self.sequence, self.count, self.seconds_elapsed
+				),
 			),
 			clear = False
 		)

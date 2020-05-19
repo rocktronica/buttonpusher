@@ -1,9 +1,10 @@
 from button import Button
 from display import Display
-from hammer import Hammer, CLICK_PRESS_DURATION
+from hammer import Hammer
 from menu import Menu
 from sequences import SEQUENCES
 from time import monotonic
+from utils import get_seconds_to_wait
 from wait import Wait
 import board
 
@@ -26,12 +27,15 @@ menu = Menu(board.A5, board.A1, confirm_button, cancel_button, display)
 def run(sequence = [], count = 0):
 	hammer.rest()
 	halt = False
-	start_time = monotonic()
 
 	display.start_sequence(sequence, count)
 
+	start_time = monotonic()
+	def get_seconds_elapsed():
+		return monotonic() - start_time
+
 	def update_display():
-		display.set_seconds_elapsed(monotonic() - start_time)
+		display.set_seconds_elapsed(get_seconds_elapsed())
 
 	for item_index in range(0, count, 1):
 		if halt: break
@@ -42,14 +46,19 @@ def run(sequence = [], count = 0):
 			display.start_step(step_index)
 
 			halt = wait.interruptible_sleep(
-				seconds - CLICK_PRESS_DURATION,
+				get_seconds_to_wait(
+					item_index,
+					step_index,
+					sequence,
+					get_seconds_elapsed()
+				),
 				update_display
 			)
 			if halt: break
 
 			hammer.click()
 
-	display.set_seconds_elapsed(monotonic() - start_time)
+	update_display()
 	wait.sleep(1)
 
 sequence_i = 0
