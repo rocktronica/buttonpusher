@@ -36,7 +36,7 @@ class Menu():
 			position = self.encoder.position
 
 			if position != self.encoder_previous_position:
-				i = (position - offset) % len(options)
+				i = (position - offset + default_selected_index) % len(options)
 
 				selection = options[i]
 				self.encoder_previous_position = position
