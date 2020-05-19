@@ -1,12 +1,11 @@
-import board
-
-from time import monotonic
 from button import Button
 from display import Display
 from hammer import Hammer, CLICK_PRESS_DURATION
 from menu import Menu
 from sequences import SEQUENCES
+from time import monotonic
 from wait import Wait
+import board
 
 cancel_button = Button(board.A3)
 confirm_button = Button(board.A4)

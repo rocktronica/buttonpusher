@@ -1,5 +1,5 @@
 from adafruit_motor import servo
-import pulseio
+from pulseio import PWMOut
 
 CLICK_PRESS_DURATION = .2
 
@@ -10,7 +10,7 @@ class Hammer():
 
 	def __init__(self, pin, wait):
 		self._servo = servo.Servo(
-			pulseio.PWMOut(pin, duty_cycle=2 ** 15, frequency=5)
+			PWMOut(pin, duty_cycle=2 ** 15, frequency=5)
 		)
 		self.wait = wait
 

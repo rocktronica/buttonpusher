@@ -1,4 +1,4 @@
-import rotaryio
+from rotaryio import IncrementalEncoder
 
 class Menu():
 	def __init__(
@@ -10,7 +10,7 @@ class Menu():
 		display
 	):
 		self.encoder_previous_position = None
-		self.encoder = rotaryio.IncrementalEncoder(pin_up, pin_down)
+		self.encoder = IncrementalEncoder(pin_up, pin_down)
 		self.confirm_button = confirm_button
 		self.cancel_button = cancel_button
 		self.display = display

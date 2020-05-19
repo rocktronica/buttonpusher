@@ -1,9 +1,7 @@
+from adafruit_character_lcd import character_lcd
+from digitalio import DigitalInOut
 from functools import reduce
-
-import time
-import board
-import digitalio
-import adafruit_character_lcd.character_lcd as characterlcd
+from time import monotonic
 
 class Display():
 	def __init__(
@@ -18,16 +16,16 @@ class Display():
 		lcd_columns = 16,
 		lcd_rows = 4
 	):
-		self.lcd = characterlcd.Character_LCD_Mono(
-			digitalio.DigitalInOut(pin_lcd_rs),
-			digitalio.DigitalInOut(pin_lcd_en),
-			digitalio.DigitalInOut(pin_lcd_d4),
-			digitalio.DigitalInOut(pin_lcd_d5),
-			digitalio.DigitalInOut(pin_lcd_d6),
-			digitalio.DigitalInOut(pin_lcd_d7),
+		self.lcd = character_lcd.Character_LCD_Mono(
+			DigitalInOut(pin_lcd_rs),
+			DigitalInOut(pin_lcd_en),
+			DigitalInOut(pin_lcd_d4),
+			DigitalInOut(pin_lcd_d5),
+			DigitalInOut(pin_lcd_d6),
+			DigitalInOut(pin_lcd_d7),
 			lcd_columns,
 			lcd_rows,
-			digitalio.DigitalInOut(pin_lcd_backlight)
+			DigitalInOut(pin_lcd_backlight)
 		)
 		self.lcd.backlight = True
 

@@ -1,10 +1,10 @@
-import digitalio
+from digitalio import DigitalInOut, Direction, Pull
 
 class Button():
 	def __init__(self, pin):
-		self._button = digitalio.DigitalInOut(pin)
-		self._button.direction = digitalio.Direction.INPUT
-		self._button.pull = digitalio.Pull.DOWN
+		self._button = DigitalInOut(pin)
+		self._button.direction = Direction.INPUT
+		self._button.pull = Pull.DOWN
 
 		self._value = False
 
