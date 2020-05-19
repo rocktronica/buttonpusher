@@ -20,7 +20,7 @@ display = Display(
 	pin_lcd_d4 = board.D9,
 	pin_lcd_backlight = board.D13
 )
-wait = Wait(cancel_button)
+wait = Wait(confirm_button, cancel_button)
 hammer = Hammer(board.A2, wait)
 menu = Menu(board.A5, board.A1, confirm_button, cancel_button, display)
 
@@ -58,8 +58,8 @@ def run(sequence = [], count = 0):
 
 			hammer.click()
 
-	update_display()
-	wait.sleep(1)
+	display.print("Stopped." if halt else "All done!")
+	wait.idle()
 
 sequence_i = 0
 count_i = 0
