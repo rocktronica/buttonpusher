@@ -12,13 +12,13 @@ cancel_button = Button(board.A3)
 confirm_button = Button(board.A4)
 
 display = Display(
-	pin_lcd_rs = board.D7,
-	pin_lcd_en = board.D8,
-	pin_lcd_d7 = board.D12,
-	pin_lcd_d6 = board.D11,
-	pin_lcd_d5 = board.D10,
-	pin_lcd_d4 = board.D9,
-	pin_lcd_backlight = board.D13
+	pin_lcd_rs = board.D7, # pin 4 on LCD
+	pin_lcd_en = board.D8, # pin 6 on LCD
+	pin_lcd_d7 = board.D12, # pin 14 on LCD
+	pin_lcd_d6 = board.D11, # pin 13 on LCD
+	pin_lcd_d5 = board.D10, # pin 12 on LCD
+	pin_lcd_d4 = board.D9, # pin 11 on LCD
+	pin_lcd_backlight = board.D13 # 15
 )
 wait = Wait(confirm_button, cancel_button)
 hammer = Hammer(board.A2, wait)
