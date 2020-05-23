@@ -8,13 +8,13 @@ class Wait():
 	def sleep(self, seconds):
 		sleep(seconds)
 
-	def idle(self):
-		while True:
-			if (self.confirm_button.is_pressed() or
-					self.cancel_button.is_pressed()):
-				break
-
-	def interruptible_sleep(self, seconds, fn, increment = .25):
+	def _interruptible_sleep(
+		self,
+		seconds,
+		fn = None,
+		buttons = [],
+		increment = .25
+	):
 		start_time = monotonic()
 		interrupted = False
 		sleeping = True
@@ -24,10 +24,11 @@ class Wait():
 
 			if fn: fn()
 
-			if self.cancel_button.is_pressed():
-				interrupted = True
-				self.cancel_button.reset()
-				break
+			for button in buttons:
+				if button.is_pressed():
+					interrupted = True
+					button.reset()
+					break
 
 			sleeping = (
 				not interrupted
@@ -35,3 +36,16 @@ class Wait():
 			)
 
 		return interrupted
+
+	def interruptible_sleep(self, seconds, fn):
+		return self._interruptible_sleep(
+			seconds,
+			fn = fn,
+			buttons = [self.cancel_button]
+		)
+
+	def idle(self, seconds):
+		return self._interruptible_sleep(
+			seconds,
+			buttons = [self.confirm_button, self.cancel_button]
+		)

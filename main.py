@@ -59,7 +59,9 @@ def run(sequence = [], count = 0):
 			hammer.click()
 
 	display.print("Stopped." if halt else "All done!")
-	wait.idle()
+	hammer.default()
+
+	wait.idle(5)
 
 sequence_i = 0
 count_i = 0
