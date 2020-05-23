@@ -14,6 +14,9 @@ module buttonpusher(
 
     VISUALIZE_PERIPHERALS = true,
 
+    screw_hole_size = 2.8,
+    screw_nut_diameter = 7, // w/ wiggle room
+
     tolerance = .1,
     loose_tolerance = .2,
     $fn = 12
@@ -181,6 +184,61 @@ module buttonpusher(
 
         _stool();
     }
+
+    module _screw_mounts(
+        _width = width - wall,
+        _length = screw_nut_diameter + 4,
+        _height = ZR_BUTTON_STILT,
+        _base_height = 2
+    ) {
+        LEFT = "left";
+        RIGHT = "right";
+
+        module _screw_mount(placement) {
+            difference() {
+                hull() {
+                    if (placement == LEFT) {
+                        translate([_width, 0, _height - e]) {
+                            cube([e, _length, e]);
+                        }
+                    } else if (placement == RIGHT) {
+                        translate([-e, 0, _height - e]) {
+                            cube([e, _length, e]);
+                        }
+                    }
+
+                    cube([_width, _length, _base_height]);
+                }
+
+                translate([_width / 2, _length / 2, -e]) {
+                    cylinder(
+                        d = screw_hole_size + tolerance * 2,
+                        h = _base_height + e * 2
+                    );
+                }
+
+                translate([_width / 2, _length / 2, _base_height]) {
+                    cylinder(
+                        d = screw_nut_diameter + tolerance * 2,
+                        h = _height - _base_height + e
+                    );
+                }
+            }
+        }
+
+        for (xyp = [
+            [e, 0, LEFT],
+            [e, MOUNT_LENGTH - _length, LEFT],
+            [width + MOUNT_DEPTH, 0, RIGHT],
+            [width + MOUNT_DEPTH, MOUNT_LENGTH - _length, RIGHT],
+        ]) {
+            translate([xyp[0], xyp[1], 0]) {
+                _screw_mount(xyp[2]);
+            }
+        }
+    }
+
+    _screw_mounts();
 
     _horn();
 
