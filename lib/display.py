@@ -56,7 +56,7 @@ class Display():
 
 	def update(self):
 		self.print(
-			"I:{}/{} S:{}/{}\n{}%".format(
+			"I:{}/{} S:{}/{}\n{}% complete".format(
 				self.item_index + 1,
 				self.count,
 				self.step_index + 1,
