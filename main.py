@@ -22,7 +22,7 @@ display = Display(
 )
 wait = Wait(confirm_button, cancel_button)
 hammer = Hammer(board.A2, wait)
-menu = Menu(board.A5, board.A1, confirm_button, cancel_button, display)
+menu = Menu(board.A1, board.A5, confirm_button, cancel_button, display)
 
 def run(sequence = [], count = 0):
 	hammer.rest()
