@@ -171,11 +171,11 @@ module buttonpusher(
                 }
 
                 translate([width - wall, 0, 0]) {
-                    cube([wall, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
+                    cube([wall + e, MOUNT_LENGTH, ZR_BUTTON_STILT + MOUNT_HEIGHT]);
                 }
 
                 translate([width, 0, 0]) {
-                    cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT]);
+                    cube([MOUNT_DEPTH, MOUNT_LENGTH, ZR_BUTTON_STILT + e]);
                 }
             }
 
