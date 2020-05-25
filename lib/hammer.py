@@ -5,8 +5,8 @@ CLICK_PRESS_DURATION = .2
 
 class Hammer():
 	DEFAULT = 0
-	REST = 90
-	PRESSED = 97
+	REST = 89
+	PRESSED = 96
 
 	def __init__(self, pin, wait):
 		self._servo = servo.Servo(
