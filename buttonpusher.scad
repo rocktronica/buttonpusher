@@ -217,11 +217,14 @@ module buttonpusher(
                     );
                 }
 
-                translate([_width / 2, _length / 2, _base_height]) {
-                    cylinder(
-                        d = screw_nut_diameter + tolerance * 2,
-                        h = _height - _base_height + e
-                    );
+                if (placement) {
+                    translate([-e, wall, _base_height]) {
+                        cube([
+                            _width + e * 2,
+                            _length - wall * 2,
+                            _height - _base_height + e
+                        ]);
+                    }
                 }
             }
         }
