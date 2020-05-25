@@ -2,7 +2,7 @@ MOUNT_LENGTH = 100.9;
 MOUNT_HEIGHT = 14.1;
 MOUNT_DEPTH = 3;
 
-MIN_WALL = .6;
+MIN_WALL = .8;
 MAX_BRIDGE = 10;
 
 module mount(
