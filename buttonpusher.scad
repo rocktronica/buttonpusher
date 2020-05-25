@@ -188,8 +188,8 @@ module buttonpusher(
     module _screw_mounts(
         _width = width - wall,
         _length = screw_nut_diameter + 4,
-        _height = ZR_BUTTON_STILT,
-        _base_height = 2
+        _height = ZR_BUTTON_STILT - e, // no overlap to avoid STL errors
+        _base_height = 1.4
     ) {
         LEFT = "left";
         RIGHT = "right";
