@@ -232,8 +232,8 @@ module buttonpusher(
         for (xyp = [
             [e, 0, LEFT],
             [e, MOUNT_LENGTH - _length, LEFT],
-            [width + MOUNT_DEPTH, 0, RIGHT],
-            [width + MOUNT_DEPTH, MOUNT_LENGTH - _length, RIGHT],
+            [width + MOUNT_DEPTH - e, 0, RIGHT],
+            [width + MOUNT_DEPTH - e, servo_tabs_y + SERVO_FULL_HEIGHT - wall + tolerance * 2],
         ]) {
             translate([xyp[0], xyp[1], 0]) {
                 _screw_mount(xyp[2]);
