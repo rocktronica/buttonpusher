@@ -13,7 +13,7 @@ class Wait():
 		seconds,
 		fn = None,
 		buttons = [],
-		increment = .25
+		increment = .1
 	):
 		start_time = monotonic()
 		interrupted = False
