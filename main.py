@@ -66,6 +66,8 @@ def run(sequence = [], count = 0):
 sequence_i = 0
 count_i = 0
 
+COUNT_MAX = 120
+
 while True:
 	hammer.default()
 
@@ -78,7 +80,7 @@ while True:
 		)
 		(count, count_i) = menu.choice(
 			"Count",
-			range(1, 101, 1),
+			range(1, COUNT_MAX + 1, 1),
 			is_cancelable = True,
 			default_selected_index = count_i
 		)
