@@ -1,51 +1,44 @@
 from time import monotonic, sleep
 
-class Wait():
-	def __init__(self, confirm_button, cancel_button):
-		self.confirm_button = confirm_button
-		self.cancel_button = cancel_button
 
-	def sleep(self, seconds):
-		sleep(seconds)
+class Wait:
+    def __init__(self, confirm_button, cancel_button):
+        self.confirm_button = confirm_button
+        self.cancel_button = cancel_button
 
-	def _interruptible_sleep(
-		self,
-		seconds,
-		fn = None,
-		buttons = [],
-		increment = .1
-	):
-		start_time = monotonic()
-		interrupted = False
-		sleeping = True
+    # Intentionally obscuring over native sleep for a consistent interface.
+    # ie, it's only ever called via Wait, making it easier to debug, if needed
+    # pylint: disable=R0201
+    def sleep(self, seconds):
+        sleep(seconds)
 
-		while sleeping:
-			sleep(increment)
+    def _interruptible_sleep(self, seconds, fn=None, buttons=None, increment=0.1):
+        buttons = buttons or []
 
-			if fn: fn()
+        start_time = monotonic()
+        interrupted = False
+        sleeping = True
 
-			for button in buttons:
-				if button.is_pressed():
-					interrupted = True
-					button.reset()
-					break
+        while sleeping:
+            sleep(increment)
 
-			sleeping = (
-				not interrupted
-				and monotonic() - start_time < seconds
-			)
+            if fn:
+                fn()
 
-		return interrupted
+            for button in buttons:
+                if button.is_pressed():
+                    interrupted = True
+                    button.reset()
+                    break
 
-	def interruptible_sleep(self, seconds, fn):
-		return self._interruptible_sleep(
-			seconds,
-			fn = fn,
-			buttons = [self.cancel_button]
-		)
+            sleeping = not interrupted and monotonic() - start_time < seconds
 
-	def idle(self, seconds):
-		return self._interruptible_sleep(
-			seconds,
-			buttons = [self.confirm_button, self.cancel_button]
-		)
+        return interrupted
+
+    def interruptible_sleep(self, seconds, fn):
+        return self._interruptible_sleep(seconds, fn=fn, buttons=[self.cancel_button])
+
+    def idle(self, seconds):
+        return self._interruptible_sleep(
+            seconds, buttons=[self.confirm_button, self.cancel_button]
+        )
