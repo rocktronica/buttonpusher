@@ -82,7 +82,7 @@ module buttonpusher(
         }
     }
 
-    module servo_tabs(
+    module _servo_tabs(
         _width = wall,
         _length = SERVO_FULL_HEIGHT + tolerance * 2,
         _support_width = wall * 3
@@ -139,7 +139,7 @@ module buttonpusher(
         }
     }
 
-    module base() {
+    module _base() {
         module _stool(
             _width = JOYCON_WIDTH * .75,
             _length = SERVO_FULL_HEIGHT + tolerance * 2,
@@ -245,16 +245,16 @@ module buttonpusher(
 
     _horn();
 
-    servo_tabs();
-    base();
+    _servo_tabs();
+    _base();
     translate([width, 0, ZR_BUTTON_STILT]) {
-        mount(3, fdm = true, tolerance = loose_tolerance);
+        mount(MOUNT_DEPTH, fdm = true, tolerance = loose_tolerance);
     }
 
-    if (VISUALIZE_PERIPHERALS) {
-        # translate([tolerance, 0, 0]) _servo();
+    # if (VISUALIZE_PERIPHERALS) {
+        translate([tolerance, 0, 0]) _servo();
 
-        # translate([width + MOUNT_DEPTH - e, 0, ZR_BUTTON_STILT]) {
+        translate([width + MOUNT_DEPTH - e, 0, ZR_BUTTON_STILT]) {
             cube([
                 JOYCON_WIDTH,
                 JOYCON_LENGTH,

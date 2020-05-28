@@ -27,7 +27,7 @@ module mount(
     cavity_height = MOUNT_HEIGHT - MOUNT_WALL * 2 + tolerance * 2;
     cavity_z = (cavity_height - MOUNT_HEIGHT) / -2;
 
-    module cavity(overage = e) {
+    module _cavity(overage = e) {
         translate([
             width - MOUNT_DEPTH + e,
             MOUNT_STOP,
@@ -41,7 +41,7 @@ module mount(
         }
     }
 
-    module lips() {
+    module _lips() {
         module lip() {
             cube([
                 MOUNT_LIP_DEPTH + e,
@@ -64,7 +64,7 @@ module mount(
         }
     }
 
-    module lips_support(count = supports_count, length = MIN_WALL) {
+    module _lips_support(count = supports_count, length = MIN_WALL) {
         start = MOUNT_STOP - length;
         end = MOUNT_LENGTH - length;
         plot = (end - start) / (count);
@@ -87,9 +87,9 @@ module mount(
 
     difference() {
         cube([width, MOUNT_LENGTH, MOUNT_HEIGHT]);
-        cavity();
+        _cavity();
     }
 
-    lips();
-    if (fdm) lips_support();
+    _lips();
+    if (fdm) _lips_support();
 }
