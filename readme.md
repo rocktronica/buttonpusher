@@ -1,8 +1,65 @@
 # buttonpusher
 
-This "buttonpusher" is a 3D-printed machine that, well, pushes the "A" button of a Nintendo JoyCon Switch at pre-programmed sequences.
+![buttonpusher](buttonpusher.jpg)
 
-More info forthcoming!
+This "buttonpusher" is a 3D-printed machine that, you guessed it!, pushes the "A" button of a Nintendo JoyCon Switch at pre-programmed sequences for variable number of times.
+
+buttonpusher is 3D-printed and made from off-the-shelf electronics from Adafruit. It requires no modifications to the Nintendo gear.
+
+<!-- For further reading on its design and why I made it, please read this blog post. -->
+
+## Sequences
+
+I made this specifically for Animal Crossing, where you sometimes need to [craft a whole bunch of something](https://animalcrossing.fandom.com/wiki/DIY_recipes) and it takes a long time and is super boring... but it could be easily extended for other games or usages, as long as the only button required to push is "A" and the sequence timing is fixed!
+
+Here's what's baked in currently:
+
+* **Craft Item**: craft an item at a DIY workbench
+* **Purchase Item**: buy an item at Nook's Cranny
+* **Bell Voucher**: exchange Nook Miles for Bell Vouchers at the [Nook Stop terminal](https://animalcrossing.fandom.com/wiki/Nook_Stop)
+* **Wish on Stars for 1 Minute**: for use during a [meteor shower](https://animalcrossing.fandom.com/wiki/Meteor_shower)
+* **Debug**: ...for testing!
+
+## Make Your Own
+
+### Parts
+
+This repo has the CircuitPython code used for the microcontroller, the 3D-printed models, as well as the OpenSCAD code used to make those models.
+
+Beyond that, you will need:
+
+* [Micro servo](https://www.adafruit.com/product/169)
+* [Adafruit Metro M0 Express](https://www.adafruit.com/product/3505) (or a similar microcontroller)
+* Character LCD (I used [this](https://www.jameco.com/shop/ProductDisplay?productId=2295423) but any 2x16 should work great)
+* [Rotary encoder w/ button](https://www.adafruit.com/product/377) to select the sequence and the number of times to run it
+* Tactile button to cancel sequence
+* Potentiometer to adjust LCD contrast
+
+### Fritzing Circuit
+
+![buttonpusher circuit in Fritzing](breadboard.png)
+
+### Deployment
+
+Unlike regular CircuitPython projects, the `.py` files here need to be compiled into `.mpy` with [mpy-cross](https://learn.adafruit.com/building-circuitpython/build-circuitpython) before being copied over. Without that, memory on the board is quickly exhausted.
+
+Once that's done, copy `main.py` and the `lib` folder onto the device over USB.
+
+### Assembly
+
+1. Insert servo into its mounting cavity -- it should fit snugly and won't need its screws
+2. Attach the one-sided servo horn into the 3D-printed hammer arm, and attach that to the servo axle
+3. Optionally, use machine screws to mount everything together
+4. Slide Joycon into mount
+
+### Usage
+
+Once everything is installed and the circuit is assembled:
+
+1. Turn rotary encoder to cycle through sequences
+2. Press rotary encoder _in_ to confirm selection
+3. Do the same to select the count of times to run sequence
+4. Use tactile button to cancel sequence or navigate back in menu
 
 ## License
 
