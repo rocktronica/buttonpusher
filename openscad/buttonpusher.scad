@@ -1,7 +1,7 @@
-include <mount.scad>;
-include <servo.scad>;
-include <horns.scad>;
-include <animation.scad>;
+include <lib/mount.scad>;
+include <lib/servo.scad>;
+include <lib/horns.scad>;
+include <lib/animation.scad>;
 
 module buttonpusher(
     horn_width = 20,
