@@ -12,7 +12,9 @@ module buttonpusher(
 
     wall = 2,
 
-    VISUALIZE_PERIPHERALS = true,
+    show_peripherals = true,
+    show_buttonpusher = true,
+    show_horn = true,
 
     screw_hole_size = 2.8,
     screw_nut_diameter = 7, // w/ wiggle room
@@ -241,17 +243,20 @@ module buttonpusher(
         }
     }
 
-    _screw_mounts();
-
-    _horn();
-
-    _servo_tabs();
-    _base();
-    translate([width, 0, ZR_BUTTON_STILT]) {
-        mount(MOUNT_DEPTH, fdm = true, tolerance = loose_tolerance);
+    if (show_horn) {
+        _horn();
     }
 
-    # if (VISUALIZE_PERIPHERALS) {
+    if (show_buttonpusher) {
+        _screw_mounts();
+        _servo_tabs();
+        _base();
+        translate([width, 0, ZR_BUTTON_STILT]) {
+            mount(MOUNT_DEPTH, fdm = true, tolerance = loose_tolerance);
+        }
+    }
+
+    # if (show_peripherals) {
         translate([tolerance, 0, 0]) _servo();
 
         translate([width + MOUNT_DEPTH - e, 0, ZR_BUTTON_STILT]) {
@@ -271,7 +276,14 @@ module buttonpusher(
     }
 }
 
+/* Constants pulled out to be overwritten by make_stls.sh */
+SHOW_PERIPHERALS = true;
+SHOW_BUTTONPUSHER = true;
+SHOW_HORN = true;
+
 buttonpusher(
-    VISUALIZE_PERIPHERALS = true,
+    show_peripherals = SHOW_PERIPHERALS,
+    show_buttonpusher = SHOW_BUTTONPUSHER,
+    show_horn = SHOW_HORN,
     horn_angle = 90 * ease_in_out_quad(undulate($t))
 );
