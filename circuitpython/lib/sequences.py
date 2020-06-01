@@ -12,6 +12,17 @@ SEQUENCES = [
         ],
     },
     {
+        "text": "Purchase Item",
+        "value": [
+            2,  # 1. Wait for dialogue to end and view item
+            3,  # 2. Confirm interest
+            3,  # 3. Click through price explanation
+            1,  # 4. Confirm purchase
+            3,  # 5. Click through "Excellent purchase!"
+            3,  # 6. Click through "Yes, thank you for the bells!"
+        ],
+    },
+    {
         "text": "Bell Voucher",
         "value": [
             2.5,  # Wait for menu and select item
