@@ -30,7 +30,7 @@ Beyond that, you will need:
 
 * [Micro servo](https://www.adafruit.com/product/169)
 * [Adafruit Metro M0 Express](https://www.adafruit.com/product/3505) (or a similar microcontroller)
-* Character LCD (I used [this](https://www.jameco.com/shop/ProductDisplay?productId=2295423) but any 2x16 should work great)
+* Character LCD (I used [this](https://www.jameco.com/shop/ProductDisplay?catalogId=10001&langId=-1&storeId=10001&productId=2295423) but any 16x2 should work great)
 * [Rotary encoder w/ button](https://www.adafruit.com/product/377) to select the sequence and the number of times to run it
 * Tactile button to cancel sequence
 * Potentiometer to adjust LCD contrast
