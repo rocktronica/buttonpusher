@@ -2,7 +2,7 @@
 
 ![buttonpusher](buttonpusher.jpg)
 
-This "buttonpusher" is a 3D-printed machine that, you guessed it!, pushes the "A" button of a Nintendo JoyCon Switch at pre-programmed sequences for variable number of times.
+This "buttonpusher" is a 3D-printed machine that, you guessed it!, pushes the "A" button of a Nintendo Joy-Con Switch at pre-programmed sequences for variable number of times.
 
 buttonpusher is 3D-printed and made from off-the-shelf electronics from Adafruit. It requires no modifications to the Nintendo gear.
 
@@ -50,7 +50,7 @@ Once that's done, copy `main.py` and the `lib` folder onto the device over USB.
 1. Insert servo into its mounting cavity -- it should fit snugly and won't need its screws
 2. Attach the one-sided servo horn into the 3D-printed hammer arm, and attach that to the servo axle
 3. Optionally, use machine screws to mount everything together
-4. Slide Joycon into mount
+4. Slide Joy-Con into mount
 
 ### Usage
 
