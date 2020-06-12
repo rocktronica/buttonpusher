@@ -6,7 +6,7 @@ This "buttonpusher" is a 3D-printed machine that, you guessed it!, pushes the "A
 
 buttonpusher is 3D-printed and made from off-the-shelf electronics from Adafruit. It requires no modifications to the Nintendo gear.
 
-<!-- For further reading on its design and why I made it, please read this blog post. -->
+**Blog post:** [https://blog.tommy.sh/posts/buttonpusher/](https://blog.tommy.sh/posts/buttonpusher/)
 
 ## Sequences
 
